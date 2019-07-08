@@ -1,0 +1,194 @@
+<nav class="navbar navbar-expand-md navbar-dark bg-primary p-0 m-0">
+  <a class="navbar-brand" (click)="switchHome();">
+    <div fxLayout="row" class="ml-2">
+      <ngx-avatar fxFlex src="" size="38"></ngx-avatar>
+      <span fxFlex class="pt-1 pl-2 font-weight-bold t-white">
+        {{projectName}}
+      </span>
+    </div>
+  </a>
+  <button class="navbar-toggler hidden-sm-up" type="button" (click)="isNavbarCollapsed = !isNavbarCollapsed"
+    data-target="#navbarsDefault" aria-controls="navbarsDefault" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div [ngbCollapse]="isNavbarCollapsed" class="collapse navbar-collapse p-0 m-0" id="navbarsDefault">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown" ngbDropdown>
+        <a class="nav-link navbarLinkCustom dropdown-toggle pt-2 t-white" id="id01" ngbDropdownToggle>
+          <i class="im im-apartment im-16 pr-2 t-white font-weight-bold"></i>
+          <span>
+            {{'enterprise' | translate}}
+          </span>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="id01" ngbDropdownMenu>
+          <hr>
+          <a class="dropdown-item" (click)="switchEnterpriseList();">
+            <i class="im im-data im-16 pr-2"></i>
+            <span>
+              {{'list' | translate}}
+            </span>
+          </a>
+        </div>
+      </li>
+      <li class="nav-item dropdown" ngbDropdown>
+        <a class="nav-link navbarLinkCustom dropdown-toggle pt-2 t-white" id="id01" ngbDropdownToggle>
+          <i class="im im-layer im-16 pr-2 t-white font-weight-bold"></i>
+          <span>
+            {{'trainingCenter' | translate}}
+          </span>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="id01" ngbDropdownMenu>
+          <hr>
+          <a class="dropdown-item" (click)="switchCenterList();">
+            <i class="im im-data im-16 pr-2"></i>
+            <span>
+              {{'list' | translate}}
+            </span>
+          </a>
+        </div>
+      </li>
+      <a class="nav-item nav-link pt-2 t-white" (click)="switchJobApplicantList();">
+        <i class="im im-users im-16 pr-2 t-white font-weight-bold"></i>
+        <span>
+          {{'jobApplicant' | translate}}
+        </span>
+      </a>
+      <li class="nav-item dropdown" ngbDropdown>
+        <a class="nav-link navbarLinkCustom dropdown-toggle pt-2 t-white" id="id01" ngbDropdownToggle>
+          <i class="im im-file-o im-16 pr-2 t-white font-weight-bold"></i>
+          <span>
+            {{'jobOffer' | translate}}
+          </span>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="id01" ngbDropdownMenu>
+          <hr>
+          <a class="dropdown-item" (click)="switchOfferList();">
+            <i class="im im-data im-16 pr-2"></i>
+            <span>
+              {{'list' | translate}}
+            </span>
+          </a>
+          <a class="dropdown-item" (click)="switchAddOffer();" *ngIf="loginBool && isEnterprise()">
+            <i class="im im-plus-circle im-16 pr-2"></i>
+            <span>
+              {{'add' | translate}}
+            </span>
+          </a>
+        </div>
+      </li>
+      <li class="nav-item dropdown" ngbDropdown *ngIf="isEnterprise() || isCenter()">
+        <a class="nav-link navbarLinkCustom dropdown-toggle pt-2 t-white" id="id01" ngbDropdownToggle>
+          <i class="im im-book im-16 pr-2 t-white font-weight-bold"></i>
+          <span>
+            {{'specifications' | translate}}
+          </span>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="id01" ngbDropdownMenu>
+          <hr>
+          <a class="dropdown-item" (click)="switchListSpecifications();">
+            <i class="im im-data im-16 pr-2"></i>
+            <span>
+              {{'list' | translate}}
+            </span>
+          </a>
+          <a class="dropdown-item" (click)="switchAddSpecification();" *ngIf="loginBool && isEnterprise()">
+            <i class="im im-plus-circle im-16 pr-2"></i>
+            <span>
+              {{'add' | translate}}
+            </span>
+          </a>
+        </div>
+      </li>
+    </ul>
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item dropdown" ngbDropdown *ngIf="!loginBool">
+        <a class="nav-link navbarLinkCustom dropdown-toggle pt-2 t-white" id="id01" ngbDropdownToggle>
+          <i class="im im-plus-circle im-16 pr-2 t-white font-weight-bold"></i>
+          <span>
+            {{'createAccount' | translate}}
+          </span>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="id01" ngbDropdownMenu>
+          <hr>
+          <a class="dropdown-item" (click)="switchRegisterEnterprise();">
+            <i class="im im-apartment im-16 pr-2"></i>
+            <span>
+              {{'enterprise' | translate}}
+            </span>
+          </a>
+          <a class="dropdown-item" (click)="switchRegisterCenter();">
+            <i class="im im-layer im-16 pr-2"></i>
+            <span>
+              {{'trainingCenter' | translate}}
+            </span>
+          </a>
+          <a class="dropdown-item" (click)="switchRegisterUser();">
+            <i class="im im-user-circle im-16 pr-2"></i>
+            <span>
+              {{'user' | translate}}
+            </span>
+          </a>
+        </div>
+      </li>
+      <li class="nav-item inline" fxHide="true" fxShow.gt-sm="true">
+        <a class="nav-link t-white" *ngIf="!loginBool" (click)="switchLogin()">
+          <i class="im im-sign-in im-16 pr-2 t-white font-weight-bold"></i>
+          <span>
+            {{'login' | translate}}
+          </span>
+        </a>
+      </li>
+      <a class="nav-item nav-link pt-2 t-white" *ngIf="loginBool && isSuerAdmin()" (click)="switchDashboard();">
+        <i class="im im-dashboard im-16 pr-2 t-white font-weight-bold"></i>
+        <span>
+          {{'dashboard' | translate}}
+        </span>
+      </a>
+      <li class="nav-item dropdown" ngbDropdown *ngIf="loginBool && (isUser() || isCenter() || isEnterprise())">
+        <a class="nav-link navbarLinkCustom dropdown-toggle pt-2 t-white" id="id01" ngbDropdownToggle>
+          <i class="im im-user-settings im-16 pr-2 t-white font-weight-bold"></i>
+          <span>
+            {{'account' | translate}}
+          </span>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="id01" ngbDropdownMenu>
+          <hr>
+          <a class="dropdown-item" (click)="switchSettings();">
+            <i class="im im-gear im-16 pr-2"></i>
+            <span>
+              {{'settings' | translate}}
+            </span>
+          </a>
+          <a class="dropdown-item" (click)="logout();">
+            <i class="im im-sign-out im-16 pr-2"></i>
+            <span>
+              {{'logout' | translate}}
+            </span>
+          </a>
+        </div>
+      </li>
+      <li class="ml-4" fxLayout="row">
+        <div fxFlex fxLayout="row" fxLayoutAlign="end center" class="mr-1">
+          <button mat-icon-button [matMenuTriggerFor]="menuAccount">
+            <div class="row">
+              <ngx-avatar src="../../assets/images/languages/circle/{{lang}}.png" size="40" textSizeRatio="2">
+              </ngx-avatar>
+              <mat-icon class="mt-2">more_vert</mat-icon>
+            </div>
+          </button>
+          <mat-menu #menuAccount="matMenu" style="z-index:150000;">
+            <button mat-menu-item (click)="changeLang('en');">
+              <img src="../../../assets/images/languages/en.png" alt="en" style="width: 30px" class="mr-1">
+              <span>English</span>
+            </button>
+            <button mat-menu-item (click)="changeLang('fr');">
+              <img src="../../../assets/images/languages/fr.png" alt="fr" style="width: 30px" class="mr-1">
+              <span>Français</span>
+            </button>
+          </mat-menu>
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>
+<router-outlet></router-outlet>

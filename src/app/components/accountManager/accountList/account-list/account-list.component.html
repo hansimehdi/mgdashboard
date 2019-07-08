@@ -1,0 +1,169 @@
+<div class="progress p-0 m-0" style="height: 4px;" *ngIf="showProgress">
+  <div class="indeterminate"></div>
+</div>
+<br>
+<mat-divider></mat-divider>
+<mat-list role="list">
+  <mat-list-item role="listitem" fxLayout="row">
+    <h6 class="material-font">{{'dashboard' | translate}} <i class="im im-angle-right im-10"></i> {{'accountsList' |
+      translate}}</h6>
+  </mat-list-item>
+</mat-list>
+<mat-divider></mat-divider>
+<div class="loader" *ngIf="pageLoading">Loading...</div>
+<div class="mt-3 ml-2 mr-2" *ngIf="!pageLoading">
+  <div class="table-responsive">
+    <table class="table">
+      <thead class="bg-blue">
+        <tr>
+          <th scope="col"></th>
+          <th scope="col">{{'fullName' | translate}}</th>
+          <th scope="col" fxHide="true" fxHide.gt-sm="false">Email</th>
+          <th scope="col" fxHide="true" fxHide.gt-sm="false">Type</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let account of accounts;">
+          <td>
+            <ngx-avatar *ngIf="!account.picture.url" name="{{account.firstname}} {{account.username}}" size="30"
+              textSizeRatio="2"></ngx-avatar>
+            <ngx-avatar *ngIf="account.picture.url" src="{{serverBase}}{{account.picture.url}}" size="30"></ngx-avatar>
+          </td>
+          <td class="material-font small" *ngIf="account.role==='U' || account.role==='sa'">{{account.firstname}} {{account.username}}</td>
+          <td class="material-font small" *ngIf="account.role==='C' || account.role==='E'">{{account.username}}</td>
+          <td class="material-font small" fxHide="true" fxHide.gt-sm="false">{{account.email}}</td>
+          <td class="material-font small">
+            <span *ngIf="account.role==='sa'">Super admin</span>
+            <span *ngIf="account.role==='C'">{{'center' | translate}}</span>
+            <span *ngIf="account.role==='E'">{{'enterprise' | translate}}</span>
+            <span *ngIf="account.role==='U'">{{'jobApplicant' | translate}}</span>
+          </td>
+          <td fxLayout="row" fxLayoutAlign="end center">
+            <div fxFlex="30" *ngIf="account.role!='sa'" fxLayoutAlign="end center" (click)="accountInfo(account.id)"
+              ngbTooltip="{{'AccountInfo' | translate}}" tooltipClass="my-custom-class"><i
+                class="material-icons t-green">info</i></div>
+            <div fxFlex *ngIf="account.role=='sa'" fxLayoutAlign="center center" (click)="accountInfo(account.id)"
+              ngbTooltip="{{'AccountInfo' | translate}}" tooltipClass="my-custom-class"><i
+                class="material-icons mr-5 pr-3 t-green">info</i></div>
+            <div *ngIf="account.role!='sa'" fxFlex="30" fxLayoutAlign="center center">
+              <i class="material-icons t-blue" *ngIf="account.blockStatus=='0'"
+                ngbTooltip="{{'blockAccount' | translate}}" tooltipClass="my-custom-class"
+                (click)="pickBlockDate(account.id)">lock</i>
+              <i class="material-icons t-blue" *ngIf="account.blockStatus=='1'"
+                ngbTooltip="{{'unlockAccount' | translate}}" tooltipClass="my-custom-class"
+                (click)="pickUnlockDate(account.id)">lock_open</i>
+            </div>
+            <div *ngIf="account.role!='sa'" fxFlex="30" fxLayoutAlign="start center"
+              ngbTooltip="{{'deleteAccount' | translate}}"><i class="material-icons t-red"
+                (click)="checkDelete(account.id)">delete</i></div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="row ml-1 mr-1 pb-5" fxHide="true" fxHide.gt-sm="false" fxLayout="row" fxLayoutAlign="center center"
+    *ngIf="permitLoading">
+    <button mat-button (click)="loadMoreAccounts()" class="bg-green t-white w-25" [disabled]="isLoading">
+      <span *ngIf="!isLoading">
+        <i class="material-icons">cloud_download</i><span class="font-weight-bold"> {{'loadMore' | translate}}</span>
+      </span>
+      <span *ngIf="isLoading">
+        <span class="font-weight-bold">{{'loading' | translate}}</span> <img style="width: 7%;"
+          src="/assets/images/appIcons/preloader.gif">
+      </span>
+    </button>
+  </div>
+  <div class="row ml-1 mr-1 pb-5" fxShow="true" fxHide.gt-sm="true" fxLayout="row" fxLayoutAlign="center center"
+    *ngIf="permitLoading">
+    <button mat-button (click)="loadMoreAccounts()" class="bg-green t-white w-75" [disabled]="isLoading">
+      <span *ngIf="!isLoading">
+        <i class="material-icons">cloud_download</i><span class="font-weight-bold"> {{'loadMore' | translate}}</span>
+      </span>
+      <span *ngIf="isLoading">
+        <span class="font-weight-bold">{{'loading' | translate}}</span> <img style="width: 7%;"
+          src="/assets/images/appIcons/preloader.gif">
+      </span>
+    </button>
+  </div>
+</div>
+<ngx-smart-modal #deleteAccountModal identifier="deleteAccountModal" customClass="nsm-dialog-animation-btt"
+  escapable="true">
+  <h5 class="t-red">{{'deleteAccount' | translate}}</h5>
+  <hr>
+  <div class="alert alert-warning" role="alert">
+    <b class="t-black">{{'note' | translate}} :</b> {{'accountDataLost' | translate}}<br>
+    {{'askAction' | translate}}
+  </div>
+  <hr>
+  <div fxLayout="row">
+    <div fxFlex="50" fxLayoutAlign="start center">
+      <button mat-raised-button class="bg-blue" (click)="deleteAccountModal.close()">{{'cancel' | translate}}</button>
+    </div>
+    <div fxFlex="50" fxLayoutAlign="end center">
+      <button mat-raised-button class="bg-red" (click)="confirmDelete()">{{'delete' | translate}}</button>
+    </div>
+  </div>
+</ngx-smart-modal>
+
+<ngx-smart-modal #BlockAccountModal identifier="BlockAccountModal" customClass="nsm-dialog-animation-btt"
+  escapable="true">
+  <form [formGroup]="blockExpireForm">
+    <h5 class="t-red">{{'blockAccount' | translate}}</h5>
+    <hr>
+    <div class="row">
+      <mat-form-field class="w-100 pr-4 pl-4">
+        <span matPrefix><i class="fa fa-calendar fa-lg mr-1 t-deep-purple"> </i></span>
+        <input matInput required ngbDatepicker (click)="d.toggle()" #d="ngbDatepicker" name="blockExpire"
+          formControlName="blockExpire" placeholder="{{'blockExpire' | translate}} (dd-mm-yyyy)" autocomplete="off">
+        <mat-icon matSuffix (click)="d.toggle()"><i class="material-icons">calendar_today</i></mat-icon>
+      </mat-form-field>
+      <div class="pr-4 pl-4"
+        *ngIf="blockExpireForm.controls.blockExpire.touched && blockExpireForm.controls.blockExpire.errors">
+        <small class="t-red  d-block" *ngIf="blockExpireForm.controls.blockExpire.errors.required">
+          {{'expireDateRequired' | translate}}
+        </small>
+      </div>
+    </div>
+    <hr>
+    <div fxLayout="row">
+      <div fxFlex="50" fxLayoutAlign="start center">
+        <button mat-raised-button class="bg-blue" (click)="BlockAccountModal.close()">{{'cancel' | translate}}</button>
+      </div>
+      <div fxFlex="50" fxLayoutAlign="end center">
+        <button mat-raised-button class="bg-red" (click)="confirmBlock()">{{'block' | translate}}</button>
+      </div>
+    </div>
+  </form>
+</ngx-smart-modal>
+
+<ngx-smart-modal #UnlockAccountModal identifier="UnlockAccountModal" customClass="nsm-dialog-animation-btt"
+  escapable="true">
+  <form [formGroup]="expireForm">
+    <h5 class="t-red">{{'unlockAccount' | translate}}</h5>
+    <hr>
+    <div class="row">
+      <mat-form-field class="w-100 pr-4 pl-4">
+        <span matPrefix><i class="fa fa-calendar fa-lg mr-1 t-deep-purple"> </i></span>
+        <input matInput required ngbDatepicker (click)="du.toggle()" #du="ngbDatepicker" name="expire"
+          formControlName="expire" placeholder="{{'expireDate' | translate}} (dd-mm-yyyy)" autocomplete="off">
+        <mat-icon matSuffix (click)="du.toggle()"><i class="material-icons">calendar_today</i></mat-icon>
+      </mat-form-field>
+      <div class="pr-4 pl-4" *ngIf="expireForm.controls.expire.touched && expireForm.controls.expire.errors">
+        <small class="t-red  d-block" *ngIf="expireForm.controls.expire.errors.required">
+          {{'expireDateRequired' | translate}}
+        </small>
+      </div>
+    </div>
+    <hr>
+    <div fxLayout="row">
+      <div fxFlex="50" fxLayoutAlign="start center">
+        <button mat-raised-button class="bg-blue" (click)="UnlockAccountModal.close()">{{'cancel' | translate}}</button>
+      </div>
+      <div fxFlex="50" fxLayoutAlign="end center">
+        <button mat-raised-button class="bg-green" (click)="confirmUnlock()"><span class="t-white">{{'unlock' |
+            translate}}</span></button>
+      </div>
+    </div>
+  </form>
+</ngx-smart-modal>

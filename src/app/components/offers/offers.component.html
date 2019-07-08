@@ -1,0 +1,32 @@
+<div class="progress p-0 m-0" style="height: 4px;" *ngIf="showProgress">
+  <div class="indeterminate-red"></div>
+</div>
+<div class="loader" *ngIf="pageLoading">Loading...</div>
+<div class="mt-3 ml-2 mr-2" *ngIf="!pageLoading && offers.length>0">
+  <div class="container card-1 mt-3 pb-3" *ngFor="let offer of offers" (click)="switchJobOfferInfo(offer.id)">
+    <div class="row">
+      <div class="col-md-6">
+        <span class="d-flex justify-content-start">
+          <h6 class="t-blue font-weight-bold"><span class="t-black">{{'enterprise' | translate}} :
+            </span>{{offer.Account.username}}</h6>
+        </span>
+      </div>
+      <div class="col-md-6">
+        <span class="d-flex justify-content-end small t-gray">
+          {{offer.insertionDate | date : "dd-MM-y"}}
+        </span>
+      </div>
+    </div>
+    <hr>
+    <p>{{offer.description}}</p>
+    <hr>
+    <a class="t-black pl-2"><i class="im im-thumb-up pr-2" [ngClass]="{'t-pink': isIN(offer.Interested)==='OK'}"
+        *ngIf="isUser()" (click)="addInterested(offer.id)"></i>{{'interested' | translate}}
+      ({{offer.Interested.length}})</a>
+  </div>
+</div>
+<div class="mt-3 ml-2 mr-2" *ngIf="!pageLoading && offers.length<=0">
+  <div class="alert alert-info d-flex justify-content-start text-center" role="alert">
+    {{'emptyList' | translate}}
+  </div>
+</div>

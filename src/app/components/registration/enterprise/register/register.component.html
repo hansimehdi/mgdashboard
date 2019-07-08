@@ -1,0 +1,191 @@
+<div class="progress p-0 m-0" style="height: 4px;" *ngIf="showProgress">
+  <div class="indeterminate-red"></div>
+</div>
+<div class="loader" *ngIf="pageLoading">Loading...</div>
+<div class="mt-3 ml-2 mr-2" *ngIf="!pageLoading">
+  <div class="container card-1">
+    <div class="row pb-3">
+      <div class="col-md-12 center-text">
+        <h1 class="t-purple font-weight-bold">{{'createEnterprise' | translate}}</h1>
+      </div>
+    </div>
+    <hr>
+    <form [formGroup]="registrationForm" (ngSubmit)="addAccount()" novalidate="true">
+      <div class="row pb-3">
+        <div class="col-md-6">
+          <mat-form-field class="w-100 pr-4 pl-4">
+            <span matPrefix><i class="fa fa-user-circle fa-lg   mr-1 t-deep-purple"> </i></span>
+            <input type="text" required name="firstname" formControlName="firstname" class="font-weight-bold" matInput
+              placeholder="{{'enterpriseName' | translate}}" autocomplete="off">
+            <mat-hint align="end">{{enterpriseAccount.firstname.length}} / 30</mat-hint>
+          </mat-form-field>
+          <div class="pr-4 pl-4"
+            *ngIf="registrationForm.controls.firstname.touched && registrationForm.controls.firstname.errors">
+            <small class="t-red d-block" *ngIf="registrationForm.controls.firstname.errors.required">
+              {{'enterpriseNameRequired' | translate}}
+            </small>
+            <small class="t-red d-block" *ngIf="registrationForm.controls.firstname.errors.minlength">
+              {{'shortEnterpriseName' | translate}}
+            </small>
+            <small class="t-red d-block" *ngIf="registrationForm.controls.firstname.errors.maxlength">
+              {{'longEnterpriseName' | translate}}
+            </small>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <mat-form-field class="w-100 pr-4 pl-4">
+            <span matPrefix><i class="im im-link im-20  mr-1 t-deep-purple"> </i></span>
+            <input type="text" name="domain" formControlName="domain" class="font-weight-bold" matInput
+              placeholder="{{'domain' | translate}}" autocomplete="off">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row pb-3">
+        <div class="col-md-6">
+          <mat-form-field class="w-100 pr-4 pl-4">
+            <span matPrefix><i class="fa fa-envelope fa-lg   mr-1 t-deep-purple"> </i></span>
+            <input type="text" required name="email" formControlName="email" class="font-weight-bold" matInput
+              placeholder="E-mail" autocomplete="off">
+            <mat-hint align="end">{{enterpriseAccount.email.length}} / 50</mat-hint>
+          </mat-form-field>
+          <div class="pr-4 pl-4"
+            *ngIf="registrationForm.controls.email.touched && registrationForm.controls.email.errors">
+            <small class="t-red  d-block" *ngIf="registrationForm.controls.email.errors.required">
+              {{'emailRequired' | translate}}
+            </small>
+            <small class="t-red  d-block" *ngIf="registrationForm.controls.email.errors.minlength">
+              {{'shortEmail' | translate}}
+            </small>
+            <small class="t-red  d-block" *ngIf="registrationForm.controls.email.errors.maxlength">
+              {{'longEmail' | translate}}
+            </small>
+            <small class="t-red d-block" *ngIf="registrationForm.controls.email.errors.pattern">
+              {{'invalidEmail' | translate}}
+            </small>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <mat-form-field class="w-100 pr-4 pl-4">
+            <span matPrefix><i class="fa fa-phone fa-lg   mr-1 t-deep-purple"> </i></span>
+            <input type="text" required name="phone" formControlName="phone" class="font-weight-bold" matInput
+              placeholder="{{'mobilePhone' | translate}}" autocomplete="off">
+          </mat-form-field>
+          <div class="pr-4 pl-4"
+            *ngIf="registrationForm.controls.phone.touched && registrationForm.controls.phone.errors">
+            <small class="t-red  d-block" *ngIf="registrationForm.controls.phone.errors.required">
+              {{'phoneRequired' | translate}}
+            </small>
+            <small class="t-red  d-block" *ngIf="registrationForm.controls.phone.errors.minlength">
+              {{'shortPhone' | translate}}
+            </small>
+            <small class="t-red  d-block" *ngIf="registrationForm.controls.phone.errors.maxlength">
+              {{'longPhone' | translate}}
+            </small>
+            <small class="t-red d-block" *ngIf="registrationForm.controls.phone.errors.pattern">
+              {{'invalidPhone' | translate}}
+            </small>
+          </div>
+        </div>
+      </div>
+      <div class="row pb-3">
+        <div class="col-md-6">
+          <mat-form-field class="w-100 pr-4 pl-4">
+            <span matPrefix><i class="im im-barcode im-20  mr-1 t-deep-purple"> </i></span>
+            <input type="text" required name="trn" formControlName="trn" class="font-weight-bold" matInput
+              placeholder="{{'trn' | translate}}" autocomplete="off">
+            <mat-hint align="end">{{enterpriseAccount.enterprise.trn.length}} / 50</mat-hint>
+          </mat-form-field>
+          <div class="pr-4 pl-4" *ngIf="registrationForm.controls.trn.touched && registrationForm.controls.trn.errors">
+            <small class="t-red  d-block" *ngIf="registrationForm.controls.trn.errors.required">
+              {{'trnRequired' | translate}}
+            </small>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <mat-form-field class="w-100 pr-4 pl-4">
+            <span matPrefix><i class="im im-users im-20   mr-1 t-deep-purple"> </i></span>
+            <input type="text" required name="empNum" formControlName="empNum" class="font-weight-bold" matInput
+              placeholder="{{'empNum' | translate}}" autocomplete="off">
+          </mat-form-field>
+          <div class="pr-4 pl-4"
+            *ngIf="registrationForm.controls.empNum.touched && registrationForm.controls.empNum.errors">
+            <small class="t-red  d-block" *ngIf="registrationForm.controls.empNum.errors.required">
+              {{'phoneRequired' | translate}}
+            </small>
+            <small class="t-red  d-block" *ngIf="registrationForm.controls.empNum.errors.minlength">
+              {{'shortPhone' | translate}}
+            </small>
+            <small class="t-red  d-block" *ngIf="registrationForm.controls.empNum.errors.maxlength">
+              {{'longPhone' | translate}}
+            </small>
+            <small class="t-red d-block" *ngIf="registrationForm.controls.empNum.errors.pattern">
+              {{'invalidPhone' | translate}}
+            </small>
+          </div>
+        </div>
+      </div>
+      <div class="row pb-3">
+        <div class="col-md-6">
+          <mat-form-field class="w-100 pr-4 pl-4">
+            <span matPrefix><i class="im im-coin im-20  mr-1 t-deep-purple"> </i></span>
+            <input type="text" name="capital" formControlName="capital" class="font-weight-bold" matInput
+              placeholder="{{'capital' | translate}}" autocomplete="off">
+          </mat-form-field>
+        </div>
+        <div class="col-md-6">
+          <mat-form-field class="w-100 pr-4 pl-4">
+            <span matPrefix><i class="im im-location im-20   mr-1 t-deep-purple"> </i></span>
+            <input type="text" name="address" formControlName="address" class="font-weight-bold" matInput
+              placeholder="{{'address' | translate}}" autocomplete="off">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row pb-3">
+        <div class="col-md-6">
+          <mat-form-field class="w-100 pr-4 pl-4">
+            <span matPrefix><i class="fa fa-lock fa-lg  mr-1 t-deep-purple"> </i></span>
+            <input type="password" required name="password" formControlName="password" class="font-weight-bold" matInput
+              placeholder="{{'password' | translate}}" autocomplete="off">
+          </mat-form-field>
+          <div class="pr-4 pl-4"
+            *ngIf="registrationForm.controls.password.touched && registrationForm.controls.password.errors">
+            <small class="t-red  d-block" *ngIf="registrationForm.controls.password.errors.required">
+              {{'passwordRequired' | translate}}
+            </small>
+            <small class="t-red  d-block" *ngIf="registrationForm.controls.password.errors.minlength">
+              {{'shortPassword' | translate}}
+            </small>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <mat-form-field class="w-100 pr-4 pl-4">
+            <span matPrefix><i class="fa fa-lock fa-lg   mr-1 t-deep-purple"> </i></span>
+            <input type="password" name="passwordConf" formControlName="passwordConf" required class="font-weight-bold"
+              matInput placeholder="{{'passwordConf' | translate}}" autocomplete="off">
+          </mat-form-field>
+          <div class="pr-4 pl-4"
+            *ngIf="registrationForm.controls.passwordConf.touched && registrationForm.controls.passwordConf.errors">
+            <small class="t-red  d-block" *ngIf="registrationForm.controls.passwordConf.errors.required">
+              {{'passwordConf' | translate}}
+            </small>
+            <small class="t-red  d-block" *ngIf="registrationForm.controls.passwordConf.errors.mismatch">
+              {{'passwordMismatch' | translate}}
+            </small>
+          </div>
+        </div>
+      </div>
+      <div class="row pt-3" fxLayout="row">
+        <div fxFlex="50" class="col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 pb-3" fxLayoutAlign="start center">
+          <button mat-button class="w-50 bg-red font-weight-bold im-16" type="button" (click)="resetNewAccount()"><i
+              class="im im-reset im-16 t-white pr-2"></i>
+            <span fxHide="true" fxShow.gt-sm="true">{{'reset' | translate}}</span></button>
+        </div>
+        <div fxFlex="50" class="col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xl-6" fxLayoutAlign="end start">
+          <button mat-button class="w-50 bg-green t-white font-weight-bold" type="submit"><i
+              class="im im-16 t-white im-plus-circle pr-2"></i><span class="t-white" fxHide="true"
+              fxShow.gt-sm="true">{{'create' | translate}}</span></button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

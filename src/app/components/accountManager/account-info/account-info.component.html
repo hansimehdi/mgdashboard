@@ -1,0 +1,170 @@
+<div class="progress p-0 m-0" style="height: 4px;" *ngIf="showProgress">
+  <div class="indeterminate"></div>
+</div>
+<br>
+<mat-divider></mat-divider>
+<mat-list role="list">
+  <mat-list-item role="listitem" fxLayout="row">
+    <h6 class="material-font"><a>{{'dashboard' | translate}}</a> <a (click)="goBack()"><i class="im im-angle-right im-10"></i>
+        {{'accountsList' | translate}}</a> <i class="im im-angle-right im-10"></i> {{'AccountInfo' | translate}}</h6>
+  </mat-list-item>
+</mat-list>
+<mat-divider></mat-divider>
+<div class="mt-3 ml-2 mr-2">
+  <div class="card-2" *ngIf="!accountNotFound">
+    <div class="row ml-1 mr-1 bg-deep-purple" style="height: 15vh;"></div>
+    <div class="row-fluid ml-2 mr-2 account-avatar-container" fxLayout="row" fxLayoutAlign="center center">
+      <ngx-avatar class="account-avatar" *ngIf="accountPictures" src="{{serverBase}}{{accountPictures}}" size="130" fxHide="true" fxShow.gt-sm="true"></ngx-avatar>
+      <ngx-avatar class="account-avatar" *ngIf="!accountPictures && accountData.role==='U'" name="{{accountData.firstname}} {{accountData.username}}" textSizeRatio="2" size="130" fxHide="true" fxShow.gt-sm="true"></ngx-avatar>
+      <ngx-avatar class="account-avatar" *ngIf="!accountPictures && (accountData.role==='E' || accountData.role==='C')" name="{{accountData.firstname}}" textSizeRatio="2" size="130" fxHide="true" fxShow.gt-sm="true"></ngx-avatar>
+      <ngx-avatar class="account-avatar-sm" *ngIf="accountPictures" src="{{serverBase}}{{accountPictures}}" size="100" fxShow="true" fxShow.gt-sm="false"></ngx-avatar>
+      <ngx-avatar class="account-avatar-sm" *ngIf="!accountPictures && accountData.role==='U'" name="{{accountData.firstname}} {{accountData.username}}" textSizeRatio="2" size="100" fxShow="true" fxShow.gt-sm="false"></ngx-avatar>
+      <ngx-avatar class="account-avatar-sm" *ngIf="!accountPictures && (accountData.role==='E' || accountData.role==='C')" name="{{accountData.firstname}} {{accountData.username}}" textSizeRatio="2" size="100" fxShow="true" fxShow.gt-sm="false"></ngx-avatar>
+    </div>
+    <div class="row-fluid ml-1 mr-1 mt-2" fxLayout="row" fxLayoutAlign="center center">
+      <span class="lead font-weight-bold" *ngIf="accountData.role==='U' || accountData.role==='sa'">{{accountData.firstname}} {{accountData.username}}</span>
+      <span class="lead font-weight-bold" *ngIf="accountData.role==='E' || accountData.role==='C'">{{accountData.firstname}}</span>
+    </div>
+    <hr class="mr-3 ml-3">
+    <div class="row mr-2 ml-2 pb-1" *ngIf="!accountNotFound">
+      <div class="col-md-4">
+        <div class="card-2 m-1 p-2">
+          <div class="pt-2" *ngIf="accountData.role==='U' || accountData.role==='sa'">
+            <span class="t-teal font-weight-bold">{{'fullName' | translate}} : </span>
+            <span>{{accountData.firstname}} {{accountData.username}}</span>
+          </div>
+          <div class="pt-2" *ngIf="accountData.role==='E'">
+            <span class="t-teal font-weight-bold">{{'enterpriseName' | translate}} : </span>
+            <span>{{accountData.firstname}} </span>
+          </div>
+          <div class="pt-2" *ngIf="accountData.role==='C'">
+            <span class="t-teal font-weight-bold">{{'centerName' | translate}} : </span>
+            <span>{{accountData.firstname}} </span>
+          </div>
+          <div class="pt-2">
+            <span class="t-teal font-weight-bold">E-mail : </span>
+            <span>{{accountData.email}}</span>
+          </div>
+          <div class="pt-2">
+            <span class="t-teal font-weight-bold">{{'mobilePhone' | translate}} : </span>
+            <span *ngIf="accountData.phone!='0'">{{accountData.phone}}</span>
+            <span *ngIf="accountData.phone=='0'">-</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card-2 m-1 p-2">
+          <div class="pt-2">
+            <span class="t-teal font-weight-bold">{{'role' | translate}} : </span>
+            <span *ngIf="accountData.role=='sa'">{{'superAdmin' | translate}}</span>
+            <span *ngIf="accountData.role=='E'">{{'enterprise' | translate}}</span>
+            <span *ngIf="accountData.role=='C'">{{'center' | translate}}</span>
+            <span *ngIf="accountData.role=='U'">{{'jobApplicant' | translate}}</span>
+          </div>
+          <div class="pt-2">
+            <span class="t-teal font-weight-bold">{{'status' | translate}} : </span>
+            <span *ngIf="accountData.status=='1'" class="t-green">{{'connected' | translate}}</span>
+            <span *ngIf="accountData.status=='0'" class="t-red">{{'offLine' | translate}}</span>
+          </div>
+          <div class="pt-2">
+            <span class="t-teal font-weight-bold">{{'subscriptionDate' | translate}} : </span>
+            <span>{{accountData.insertionDate | date : "dd-MM-y"}}</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card-2 m-1 p-2">
+          <div class="pt-2">
+            <span class="t-teal font-weight-bold">{{'lastLogin' | translate}} : </span>
+            <span>{{accountData.connectionDT | date : "dd-MM-y"}}</span>
+          </div>
+          <div class="pt-2">
+            <span class="t-teal font-weight-bold">{{'blockStatus' | translate}} : </span>
+            <span *ngIf="accountData.blockStatus=='0'" class="t-green">{{'active' | translate}}</span>
+            <span *ngIf="accountData.blockStatus=='1'" class="t-red">{{'blocked' | translate}}</span>
+          </div>
+          <div class="pt-2">
+            <span *ngIf="accountData.blockStatus=='1'">
+              <span class="t-teal font-weight-bold">{{'blockExpireDate' | translate}} : </span>
+              <span>{{accountData.blockExpire | date : "dd-MM-y"}}</span>
+            </span>
+            <span *ngIf="accountData.blockStatus=='0'">
+              <span class="t-teal font-weight-bold">{{'expireDate' | translate}} : </span>
+              <span>{{accountData.expire | date : "dd-MM-y"}}</span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <mat-divider class="mt-2"></mat-divider>
+    <br>
+    <div *ngIf="accountLogs?.length>0">
+      <div class="row ml-1 mr-1">
+        <div class="table-responsive pb-3">
+          <table class="table card-1">
+            <thead>
+              <tr class="bg-blue">
+                <th scope="col" class="no-wrap"><i class="im im-date-o im-16"></i> Date</th>
+                <th scope="col" class="no-wrap"><i class="im im-bell-active im-16"> </i>Action</th>
+                <th scope="col" class="no-wrap"><i class="im im-sitemap im-16"> </i> IP</th>
+                <th scope="col" class="no-wrap"><i class="im im-chrome im-16"> </i> {{'browser' | translate}}</th>
+                <th scope="col" class="no-wrap"><i class="im im-monitor-o im-16"> </i> {{'device' | translate}}</th>
+                <th scope="col" class="no-wrap"><i class="im im-location im-16"> </i> {{'country' | translate}}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let log of accountLogs;">
+                <td class="small no-wrap">
+                  {{log.logDT | date : "dd-MM-y"}} {{'at' | translate}} {{log.logDT | date : "HH:mm"}}
+                </td>
+                <td class="small no-wrap">
+                  <span *ngIf="log.stringCode=='1'">{{'logIn' | translate}}</span>
+                  <span *ngIf="log.stringCode=='0'">{{'logOut' | translate}}</span>
+                </td>
+                <td class="small no-wrap">{{log.ip}}</td>
+                <td class="small no-wrap">{{log.agent}}</td>
+                <td class="small no-wrap">{{log.device}}</td>
+                <td class="small no-wrap">
+                  <span *ngIf="log.country!=''">{{log.country}}</span>
+                  <span *ngIf="log.country==''" class="t-red">{{'noData' | translate}}</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="row ml-1 mr-1 pb-5" fxHide="true" fxHide.gt-sm="false" fxLayout="row" fxLayoutAlign="center center"
+        *ngIf="permitLoading">
+        <button mat-button (click)="loadMoreLogs()" class="bg-green t-white w-25" [disabled]="isLoading">
+          <span *ngIf="!isLoading">
+            <i class="material-icons">cloud_download</i><span class="font-weight-bold"> {{'loadMore' | translate}}</span>
+          </span>
+          <span *ngIf="isLoading">
+            <span class="font-weight-bold">{{'loading' | translate}}</span> <img style="width: 7%;" src="/assets/images/appIcons/preloader.gif">
+          </span>
+        </button>
+      </div>
+      <div class="row ml-1 mr-1 pb-5" fxShow="true" fxHide.gt-sm="true" fxLayout="row" fxLayoutAlign="center center"
+        *ngIf="permitLoading">
+        <button mat-button (click)="loadMoreLogs()" class="bg-green t-white w-75" [disabled]="isLoading">
+          <span *ngIf="!isLoading">
+            <i class="material-icons">cloud_download</i><span class="font-weight-bold"> {{'loadMore' | translate}}</span>
+          </span>
+          <span *ngIf="isLoading">
+            <span class="font-weight-bold">{{'loading' | translate}}</span> <img style="width: 7%;" src="/assets/images/appIcons/preloader.gif">
+          </span>
+        </button>
+      </div>
+    </div>
+    <div *ngIf="accountLogs.length <= 0">
+      <div class="alert alert-primary" role="alert" fxLayout="row" fxLayoutAlign="center center">
+        <i class="im im-info pr-2"></i>{{'noAcitivity' | translate}}
+      </div>
+    </div>
+  </div>
+  <div class="card-2" *ngIf="accountNotFound">
+    <div class="alert alert-info" role="alert" fxLayout="row" fxLayoutAlign="center center">
+      <i class="im im-info pr-2"></i>{{'accountNotFound' | translate}}
+    </div>
+  </div>
+</div>

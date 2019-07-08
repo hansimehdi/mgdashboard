@@ -1,0 +1,641 @@
+<div class="progress p-0 m-0" style="height: 4px;" *ngIf="showProgress">
+  <div class="indeterminate"></div>
+</div>
+<br>
+<mat-divider></mat-divider>
+<mat-list role="list">
+  <mat-list-item role="listitem" fxLayout="row">
+    <h6 class="material-font">{{'dashboard' | translate}} <i class="im im-angle-right im-10"></i> {{'contact' |
+      translate}}</h6>
+  </mat-list-item>
+</mat-list>
+<mat-divider></mat-divider>
+<div class="loader" *ngIf="pageLoading">Loading...</div>
+<div class="mt-3 ml-2 mr-2" *ngIf="!pageLoading">
+  <mat-toolbar class="bg-green" fxLayout="row">
+    <div fxFlex="80" fxLayoutAlign="start center">
+      <small fxShow="true" fxHide.gt-sm="true"> <i class="material-icons pr-2 t-white">settings</i></small>
+      <span fxHide="true" fxShow.gt-sm="true" class="t-white"><i class="material-icons pr-2 t-white">settings</i>
+        {{'contactConfiguration'| translate}}</span>
+    </div>
+    <div fxFlex="20" fxLayoutAlign="end center">
+      <i class="material-icons  t-white" *ngIf="showUpdateButton" ngbTooltip="{{'update' | translate}}" tooltipClass="my-custom-class"
+        (click)="toggleShowDiv()">create</i>
+      <i class="material-icons  t-white" *ngIf="showCancelButton" ngbTooltip="{{'cancel' | translate}}" tooltipClass="my-custom-class"
+        (click)="toggleShowDiv()">cancel_presentation</i>
+    </div>
+  </mat-toolbar>
+  <div class="mt-2 mr-2 ml-2 mb-2 card-1" *ngIf="!pageLoading">
+    <div class="container">
+      <div class="row" [@slideInOut]="animationState">
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <tbody>
+              <tr>
+                <td class="no-wrap">
+                  <i class="im im-newsletter t-pink pr-2"></i><span class="font-weight-bold">E-mail</span>
+                </td>
+                <td class="small no-wrap">
+                  {{contactConf.email}}
+                </td>
+              </tr>
+              <tr>
+                <td class="no-wrap">
+                  <i class="im im-phone t-pink pr-2"></i><span class="font-weight-bold">{{'phone' | translate}}</span>
+                </td>
+                <td class="small no-wrap">
+                  {{contactConf.phone}}
+                </td>
+              </tr>
+              <tr>
+                <td class="no-wrap">
+                  <i class="im im-printer t-pink pr-2"></i><span class="font-weight-bold">Fax</span>
+                </td>
+                <td class="small no-wrap">
+                  {{contactConf.fax}}
+                </td>
+              </tr>
+              <tr>
+                <td class="no-wrap">
+                  <i class="im im-mobile t-pink pr-2"></i><span class="font-weight-bold">{{'mobilePhone' | translate}}</span>
+                </td>
+                <td class="small no-wrap">
+                  {{contactConf.mobile}}
+                </td>
+              </tr>
+              <tr>
+                <td class="no-wrap">
+                  <i class="im im-location t-pink pr-2"></i><span class="font-weight-bold">{{'address' | translate}}</span>
+                </td> 
+                <td class="small no-wrap">
+                  <span *ngIf="contactConf.adress.length>1">
+                    {{contactConf.adress}}
+                  </span>
+                  <span *ngIf="contactConf.adress.length<=1">
+                    {{'noData' | translate}}
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <td class="no-wrap">
+                  <i class="im im-facebook t-pink pr-2"></i><span class="font-weight-bold">{{'Facebook' | translate}}</span>
+                </td>
+                <td class="small no-wrap">
+                  {{contactConf.facebook}}
+                </td>
+              </tr>
+              <tr>
+                <td class="no-wrap">
+                  <i class="im im-whatsapp t-pink pr-2"></i><span class="font-weight-bold">{{'Whatsapp' | translate}}</span>
+                </td>
+                <td class="small no-wrap">
+                  {{contactConf.whatsapp}}
+                </td>
+              </tr>
+              <tr>
+                <td class="no-wrap">
+                  <i class="im im-linkedin t-pink pr-2"></i><span class="font-weight-bold">{{'Linkedin' | translate}}</span>
+                </td>
+                <td class="small no-wrap">
+                  {{contactConf.linkedin}}
+                </td>
+              </tr>
+              <tr>
+                <td class="no-wrap">
+                  <i class="im im-google-plus t-pink pr-2"></i><span class="font-weight-bold">{{'Google Plus' |
+                    translate}}</span>
+                </td>
+                <td class="small no-wrap">
+                  {{contactConf.googlePlus}}
+                </td>
+              </tr>
+              <tr>
+                <td class="no-wrap">
+                  <i class="im im-twitter t-pink pr-2"></i><span class="font-weight-bold">{{'Twitter' | translate}}</span>
+                </td>
+                <td class="small no-wrap">
+                  {{contactConf.tweeter}}
+                </td>
+              </tr>
+              <tr>
+                <td class="no-wrap">
+                  <i class="im im-instagram t-pink pr-2"></i><span class="font-weight-bold">{{'Instagram' | translate}}</span>
+                </td>
+                <td class="small no-wrap">
+                  {{contactConf.instagram}}
+                </td>
+              </tr>
+              <tr>
+                <td class="no-wrap">
+                  <i class="im im-navigation t-pink pr-2"></i><span class="font-weight-bold">{{'longitude' |
+                    translate}}</span>
+                </td>
+                <td class="small no-wrap">
+                  <span *ngIf="contactConf.Markerlongi.length>1">
+                    {{contactConf.Markerlongi}}
+                  </span>
+                  <span *ngIf="contactConf.Markerlongi.length<=1">
+                    {{'noData' | translate}}
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <td class="no-wrap">
+                  <i class="im im-navigation t-pink pr-2"></i><span class="font-weight-bold">{{'latitude' | translate}}</span>
+                </td>
+                <td class="small no-wrap">
+                  <span *ngIf="contactConf.Markerlat.length>1">
+                    {{contactConf.Markerlat}}
+                  </span>
+                  <span *ngIf="contactConf.Markerlat.length<=1">
+                    {{'noData' | translate}}
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <i class="im im-map-o t-pink pr-2"></i><span class="font-weight-bold">{{'mapApi' | translate}}</span>
+                </td>
+                <td class="small">
+                  <span *ngIf="contactConf.mapapi.length>1">
+                    {{contactConf.mapapi}}
+                  </span>
+                  <span *ngIf="contactConf.mapapi.length<=1">
+                    {{'noData' | translate}}
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="row" [@slideInOut]="animationStateReverse">
+        <div class="container-fluid">
+          <fieldset>
+            <legend>E-mail:</legend>
+            <form [formGroup]="emailForm" (ngSubmit)="updateContactMail()">
+              <div class="row">
+                <div class="col-md-8">
+                  <mat-form-field class="w-100 pr-4 pl-4">
+                    <span matPrefix><i class="fa fa-envelope fa-lg   mr-1 t-teal"> </i></span>
+                    <input type="text" required name="email" value="{{contactConf.email}}" formControlName="email"
+                      class="font-weight-bold" matInput placeholder="{{'E-mail' | translate}}" autocomplete="off">
+                  </mat-form-field>
+                  <div class="pr-4 pl-4" *ngIf="emailForm.controls.email.touched && emailForm.controls.email.errors">
+                    <small class="t-red d-block" *ngIf="emailForm.controls.email.errors.required">
+                      {{'emailRequired' | translate}}
+                    </small>
+                    <small class="t-red d-block" *ngIf="emailForm.controls.email.errors.minlength">
+                      {{'shortEmail' | translate}}
+                    </small>
+                    <small class="t-red d-block" *ngIf="emailForm.controls.email.errors.maxlength">
+                      {{'longEmail' | translate}}
+                    </small>
+                    <small class="t-red d-block" *ngIf="emailForm.controls.email.errors.pattern">
+                      {{'invalidEmail' | translate}}
+                    </small>
+                  </div>
+                </div>
+                <div class="col-md-4" fxLayoutAlign="end center">
+                  <button mat-button type="submit" class="bg-blue font-weight-bold">
+                    <i class="im im-sync im-16 pr-2" *ngIf="!emailLoading"></i>
+                    <img class="pr-2 image-prealoader" *ngIf="emailLoading" src="/assets/images/appIcons/whitespinner.gif">
+                    <span>{{'update' | translate}}</span>
+                  </button>
+                </div>
+              </div>
+            </form>
+          </fieldset>
+          <hr>
+          <fieldset>
+            <legend>{{'phone' | translate}}:</legend>
+            <form [formGroup]="phoneForm" (ngSubmit)="updateContactPhone()">
+              <div class="row">
+                <div class="col-md-8">
+                  <mat-form-field class="w-100 pr-4 pl-4">
+                    <span matPrefix><i class="fa fa-phone fa-lg   mr-1 t-teal"> </i></span>
+                    <input type="text" required name="phone" value="{{contactConf.phone}}" formControlName="phone"
+                      class="font-weight-bold" matInput placeholder="{{'phone' | translate}}" autocomplete="off">
+                  </mat-form-field>
+                  <div class="pr-4 pl-4" *ngIf="phoneForm.controls.phone.touched && phoneForm.controls.phone.errors">
+                    <small class="t-red d-block" *ngIf="phoneForm.controls.phone.errors.required">
+                      {{'phoneRequired' | translate}}
+                    </small>
+                    <small class="t-red d-block" *ngIf="phoneForm.controls.phone.errors.minlength">
+                      {{'shortPhone' | translate}}
+                    </small>
+                    <small class="t-red d-block" *ngIf="phoneForm.controls.phone.errors.maxlength">
+                      {{'longPhone' | translate}}
+                    </small>
+                    <small class="t-red d-block" *ngIf="phoneForm.controls.phone.errors.pattern">
+                      {{'invalidPhone' | translate}}
+                    </small>
+                  </div>
+                </div>
+                <div class="col-md-4" fxLayoutAlign="end center">
+                  <button mat-button type="submit" class="bg-blue font-weight-bold">
+                    <i class="im im-sync im-16 pr-2" *ngIf="!phoneLoading"></i>
+                    <img class="pr-2 image-prealoader" *ngIf="phoneLoading" src="/assets/images/appIcons/whitespinner.gif">
+                    <span>{{'update' | translate}}</span>
+                  </button>
+                </div>
+              </div>
+            </form>
+          </fieldset>
+          <hr>
+          <fieldset>
+            <legend>{{'Fax' | translate}}:</legend>
+            <form [formGroup]="faxForm" (ngSubmit)="updateContactFax()">
+              <div class="row">
+                <div class="col-md-8">
+                  <mat-form-field class="w-100 pr-4 pl-4">
+                    <span matPrefix><i class="fa fa-print fa-lg   mr-1 t-teal"> </i></span>
+                    <input type="text" required name="fax" value="{{contactConf.fax}}" formControlName="fax" class="font-weight-bold"
+                      matInput placeholder="{{'Fax' | translate}}" autocomplete="off">
+                  </mat-form-field>
+                  <div class="pr-4 pl-4" *ngIf="faxForm.controls.fax.touched && faxForm.controls.fax.errors">
+                    <small class="t-red d-block" *ngIf="faxForm.controls.fax.errors.required">
+                      {{'faxRequired' | translate}}
+                    </small>
+                    <small class="t-red d-block" *ngIf="faxForm.controls.fax.errors.minlength">
+                      {{'shortFax' | translate}}
+                    </small>
+                    <small class="t-red d-block" *ngIf="faxForm.controls.fax.errors.maxlength">
+                      {{'longFax' | translate}}
+                    </small>
+                    <small class="t-red d-block" *ngIf="faxForm.controls.fax.errors.pattern">
+                      {{'invalidFax' | translate}}
+                    </small>
+                  </div>
+                </div>
+                <div class="col-md-4" fxLayoutAlign="end center">
+                  <button mat-button type="submit" class="bg-blue font-weight-bold">
+                    <i class="im im-sync im-16 pr-2" *ngIf="!faxLoading"></i>
+                    <img class="pr-2 image-prealoader" *ngIf="faxLoading" src="/assets/images/appIcons/whitespinner.gif">
+                    <span>{{'update' | translate}}</span>
+                  </button>
+                </div>
+              </div>
+            </form>
+          </fieldset>
+          <hr>
+          <fieldset>
+            <legend>{{'mobilePhone' | translate}}:</legend>
+            <form [formGroup]="mobileForm" (ngSubmit)="updateContactMobile()">
+              <div class="row">
+                <div class="col-md-8">
+                  <mat-form-field class="w-100 pr-4 pl-4">
+                    <span matPrefix><i class="fa fa-mobile fa-lg   mr-1 t-teal"> </i></span>
+                    <input type="text" required name="mobile" value="{{contactConf.mobile}}" formControlName="mobile"
+                      class="font-weight-bold" matInput placeholder="{{'mobilePhone' | translate}}" autocomplete="off">
+                  </mat-form-field>
+                  <div class="pr-4 pl-4" *ngIf="mobileForm.controls.mobile.touched && mobileForm.controls.mobile.errors">
+                    <small class="t-red d-block" *ngIf="mobileForm.controls.mobile.errors.required">
+                      {{'mobileRequired' | translate}}
+                    </small>
+                    <small class="t-red d-block" *ngIf="mobileForm.controls.mobile.errors.minlength">
+                      {{'shortMobile' | translate}}
+                    </small>
+                    <small class="t-red d-block" *ngIf="mobileForm.controls.mobile.errors.maxlength">
+                      {{'longMobile' | translate}}
+                    </small>
+                    <small class="t-red d-block" *ngIf="mobileForm.controls.mobile.errors.pattern">
+                      {{'invalidMobile' | translate}}
+                    </small>
+                  </div>
+                </div>
+                <div class="col-md-4" fxLayoutAlign="end center">
+                  <button mat-button type="submit" class="bg-blue font-weight-bold">
+                    <i class="im im-sync im-16 pr-2" *ngIf="!mobileLoading"></i>
+                    <img class="pr-2 image-prealoader" *ngIf="mobileLoading" src="/assets/images/appIcons/whitespinner.gif">
+                    <span>{{'update' | translate}}</span>
+                  </button>
+                </div>
+              </div>
+            </form>
+          </fieldset>
+          <hr>
+          <fieldset>
+            <legend>{{'address' | translate}}:</legend>
+            <form [formGroup]="addressForm" (ngSubmit)="updateContactAddress()">
+              <div class="row">
+                <div class="col-md-8">
+                  <mat-form-field class="w-100 pr-4 pl-4">
+                    <span matPrefix><i class="fa fa-map-marker fa-lg   mr-1 t-teal"> </i></span>
+                    <input type="text" required name="address" value="{{contactConf.adress}}" formControlName="address"
+                      class="font-weight-bold" matInput placeholder="{{'address' | translate}}" autocomplete="off">
+                  </mat-form-field>
+                  <div class="pr-4 pl-4" *ngIf="addressForm.controls.address.touched && addressForm.controls.address.errors">
+                    <small class="t-red d-block" *ngIf="addressForm.controls.address.errors.required">
+                      {{'addressRequired' | translate}}
+                    </small>
+                    <small class="t-red d-block" *ngIf="addressForm.controls.address.errors.minlength">
+                      {{'shortAddress' | translate}}
+                    </small>
+                  </div>
+                </div>
+                <div class="col-md-4" fxLayoutAlign="end center">
+                  <button mat-button type="submit" class="bg-blue font-weight-bold">
+                    <i class="im im-sync im-16 pr-2" *ngIf="!addressLoading"></i>
+                    <img class="pr-2 image-prealoader" *ngIf="addressLoading" src="/assets/images/appIcons/whitespinner.gif">
+                    <span>{{'update' | translate}}</span>
+                  </button>
+                </div>
+              </div>
+            </form>
+          </fieldset>
+          <hr>
+          <fieldset>
+            <legend>{{'Facebook' | translate}}:</legend>
+            <form [formGroup]="facebookForm" (ngSubmit)="updateContactFacebook()">
+              <div class="row">
+                <div class="col-md-8">
+                  <mat-form-field class="w-100 pr-4 pl-4">
+                    <span matPrefix><i class="im im-facebook im-20 mr-1 t-teal"> </i></span>
+                    <input type="text" required name="facebook" value="{{contactConf.facebook}}" formControlName="facebook"
+                      class="font-weight-bold" matInput placeholder="{{'Facebook' | translate}}" autocomplete="off">
+                  </mat-form-field>
+                  <div class="pr-4 pl-4" *ngIf="facebookForm.controls.facebook.touched && facebookForm.controls.facebook.errors">
+                    <small class="t-red d-block" *ngIf="facebookForm.controls.facebook.errors.required">
+                      {{'facebookRequired' | translate}}
+                    </small>
+                    <small class="t-red d-block" *ngIf="facebookForm.controls.facebook.errors.minlength">
+                      {{'shortFacebook' | translate}}
+                    </small>
+                  </div>
+                </div>
+                <div class="col-md-4" fxLayoutAlign="end center">
+                  <button mat-button type="submit" class="bg-blue font-weight-bold">
+                    <i class="im im-sync im-16 pr-2" *ngIf="!facebookLoading"></i>
+                    <img class="pr-2 image-prealoader" *ngIf="facebookLoading" src="/assets/images/appIcons/whitespinner.gif">
+                    <span>{{'update' | translate}}</span>
+                  </button>
+                </div>
+              </div>
+            </form>
+          </fieldset>
+          <hr>
+          <fieldset>
+            <legend>{{'Whatsapp' | translate}}:</legend>
+            <form [formGroup]="whatsappForm" (ngSubmit)="updateContactWhatsapp()">
+              <div class="row">
+                <div class="col-md-8">
+                  <mat-form-field class="w-100 pr-4 pl-4">
+                    <span matPrefix><i class="im im-whatsapp im-20 mr-1 t-teal"> </i></span>
+                    <input type="text" required name="whatsapp" value="{{contactConf.whatsapp}}" formControlName="whatsapp"
+                      class="font-weight-bold" matInput placeholder="{{'Whatsapp' | translate}}" autocomplete="off">
+                  </mat-form-field>
+                  <div class="pr-4 pl-4" *ngIf="whatsappForm.controls.whatsapp.touched && whatsappForm.controls.whatsapp.errors">
+                    <small class="t-red d-block" *ngIf="whatsappForm.controls.whatsapp.errors.required">
+                      {{'whatsappRequired' | translate}}
+                    </small>
+                    <small class="t-red d-block" *ngIf="whatsappForm.controls.whatsapp.errors.minlength">
+                      {{'shortWhatsapp' | translate}}
+                    </small>
+                    <small class="t-red d-block" *ngIf="whatsappForm.controls.whatsapp.errors.maxlength">
+                      {{'longWhatsapp' | translate}}
+                    </small>
+                    <small class="t-red d-block" *ngIf="whatsappForm.controls.whatsapp.errors.pattern">
+                      {{'invalidWhatsapp' | translate}}
+                    </small>
+                  </div>
+                </div>
+                <div class="col-md-4" fxLayoutAlign="end center">
+                  <button mat-button type="submit" class="bg-blue font-weight-bold">
+                    <i class="im im-sync im-16 pr-2" *ngIf="!whatsappLoading"></i>
+                    <img class="pr-2 image-prealoader" *ngIf="whatsappLoading" src="/assets/images/appIcons/whitespinner.gif">
+                    <span>{{'update' | translate}}</span>
+                  </button>
+                </div>
+              </div>
+            </form>
+          </fieldset>
+          <hr>
+          <fieldset>
+            <legend>{{'LinkedIn' | translate}}:</legend>
+            <form [formGroup]="linkedInForm" (ngSubmit)="updateContactLinkedIn()">
+              <div class="row">
+                <div class="col-md-8">
+                  <mat-form-field class="w-100 pr-4 pl-4">
+                    <span matPrefix><i class="im im-linkedin im-20 mr-1 t-teal"> </i></span>
+                    <input type="text" required name="linkedin" value="{{contactConf.linkedin}}" formControlName="linkedin"
+                      class="font-weight-bold" matInput placeholder="{{'LinkedIn' | translate}}" autocomplete="off">
+                  </mat-form-field>
+                  <div class="pr-4 pl-4" *ngIf="linkedInForm.controls.linkedin.touched && linkedInForm.controls.linkedin.errors">
+                    <small class="t-red d-block" *ngIf="linkedInForm.controls.linkedin.errors.required">
+                      {{'linkedinRequired' | translate}}
+                    </small>
+                    <small class="t-red d-block" *ngIf="linkedInForm.controls.linkedin.errors.minlength">
+                      {{'shortLinkedIn' | translate}}
+                    </small>
+                  </div>
+                </div>
+                <div class="col-md-4" fxLayoutAlign="end center">
+                  <button mat-button type="submit" class="bg-blue font-weight-bold">
+                    <i class="im im-sync im-16 pr-2" *ngIf="!likedinLoading"></i>
+                    <img class="pr-2 image-prealoader" *ngIf="likedinLoading" src="/assets/images/appIcons/whitespinner.gif">
+                    <span>{{'update' | translate}}</span>
+                  </button>
+                </div>
+              </div>
+            </form>
+          </fieldset>
+          <hr>
+          <fieldset>
+            <legend>{{'Twitter' | translate}}:</legend>
+            <form [formGroup]="twitterForm" (ngSubmit)="updateContactTwitter()">
+              <div class="row">
+                <div class="col-md-8">
+                  <mat-form-field class="w-100 pr-4 pl-4">
+                    <span matPrefix><i class="im im-twitter im-20 mr-1 t-teal"> </i></span>
+                    <input type="text" required name="twitter" value="{{contactConf.tweeter}}" formControlName="twitter"
+                      class="font-weight-bold" matInput placeholder="{{'Twitter' | translate}}" autocomplete="off">
+                  </mat-form-field>
+                  <div class="pr-4 pl-4" *ngIf="twitterForm.controls.twitter.touched && twitterForm.controls.twitter.errors">
+                    <small class="t-red d-block" *ngIf="twitterForm.controls.twitter.errors.required">
+                      {{'twitterRequired' | translate}}
+                    </small>
+                    <small class="t-red d-block" *ngIf="twitterForm.controls.twitter.errors.minlength">
+                      {{'shortTwitter' | translate}}
+                    </small>
+                  </div>
+                </div>
+                <div class="col-md-4" fxLayoutAlign="end center">
+                  <button mat-button type="submit" class="bg-blue font-weight-bold">
+                    <i class="im im-sync im-16 pr-2" *ngIf="!twitterLoading"></i>
+                    <img class="pr-2 image-prealoader" *ngIf="twitterLoading" src="/assets/images/appIcons/whitespinner.gif">
+                    <span>{{'update' | translate}}</span>
+                  </button>
+                </div>
+              </div>
+            </form>
+          </fieldset>
+          <hr>
+          <fieldset>
+            <legend>{{'Google+' | translate}}:</legend>
+            <form [formGroup]="googlePlusForm" (ngSubmit)="updateContactGooglePlus()">
+              <div class="row">
+                <div class="col-md-8">
+                  <mat-form-field class="w-100 pr-4 pl-4">
+                    <span matPrefix><i class="im im-google-plus im-20 mr-1 t-teal"> </i></span>
+                    <input type="text" required name="googlePlus" value="{{contactConf.googlePlus}}" formControlName="googlePlus"
+                      class="font-weight-bold" matInput placeholder="{{'Google+' | translate}}" autocomplete="off">
+                  </mat-form-field>
+                  <div class="pr-4 pl-4" *ngIf="googlePlusForm.controls.googlePlus.touched && googlePlusForm.controls.googlePlus.errors">
+                    <small class="t-red d-block" *ngIf="googlePlusForm.controls.googlePlus.errors.required">
+                      {{'googleplusRequired' | translate}}
+                    </small>
+                    <small class="t-red d-block" *ngIf="googlePlusForm.controls.googlePlus.errors.minlength">
+                      {{'shortGooglePlus' | translate}}
+                    </small>
+                  </div>
+                </div>
+                <div class="col-md-4" fxLayoutAlign="end center">
+                  <button mat-button type="submit" class="bg-blue font-weight-bold">
+                    <i class="im im-sync im-16 pr-2" *ngIf="!googleplusLoading"></i>
+                    <img class="pr-2 image-prealoader" *ngIf="googleplusLoading" src="/assets/images/appIcons/whitespinner.gif">
+                    <span>{{'update' | translate}}</span>
+                  </button>
+                </div>
+              </div>
+            </form>
+          </fieldset>
+          <hr>
+          <fieldset>
+            <legend>{{'Instagram' | translate}}:</legend>
+            <form [formGroup]="instagramForm" (ngSubmit)="updateContactInstagram()">
+              <div class="row">
+                <div class="col-md-8">
+                  <mat-form-field class="w-100 pr-4 pl-4">
+                    <span matPrefix><i class="im im-instagram im-20 mr-1 t-teal"> </i></span>
+                    <input type="text" required name="instagram" value="{{contactConf.instagram}}" formControlName="instagram"
+                      class="font-weight-bold" matInput placeholder="{{'Instagram' | translate}}" autocomplete="off">
+                  </mat-form-field>
+                  <div class="pr-4 pl-4" *ngIf="instagramForm.controls.instagram.touched && instagramForm.controls.instagram.errors">
+                    <small class="t-red d-block" *ngIf="instagramForm.controls.instagram.errors.required">
+                      {{'instagramRequired' | translate}}
+                    </small>
+                    <small class="t-red d-block" *ngIf="instagramForm.controls.instagram.errors.minlength">
+                      {{'shortInstagram' | translate}}
+                    </small>
+                  </div>
+                </div>
+                <div class="col-md-4" fxLayoutAlign="end center">
+                  <button mat-button type="submit" class="bg-blue font-weight-bold">
+                    <i class="im im-sync im-16 pr-2" *ngIf="!instagramLoading"></i>
+                    <img class="pr-2 image-prealoader" *ngIf="instagramLoading" src="/assets/images/appIcons/whitespinner.gif">                    
+                    <span>{{'update' | translate}}</span>
+                  </button>
+                </div>
+              </div>
+            </form>
+          </fieldset>
+          <hr>
+          <fieldset>
+            <legend>{{'latitude' | translate}}:</legend>
+            <form [formGroup]="markerLatForm" (ngSubmit)="updateContactLatitude()">
+              <div class="row">
+                <div class="col-md-8">
+                  <mat-form-field class="w-100 pr-4 pl-4">
+                    <span matPrefix><i class="im im-location im-20 mr-1 t-teal"> </i></span>
+                    <input type="text" required name="markerlat" value="{{contactConf.Markerlat}}" formControlName="markerlat"
+                      class="font-weight-bold" matInput placeholder="{{'latitude' | translate}}" autocomplete="off">
+                  </mat-form-field>
+                  <div class="pr-4 pl-4" *ngIf="markerLatForm.controls.markerlat.touched && markerLatForm.controls.markerlat.errors">
+                    <small class="t-red d-block" *ngIf="markerLatForm.controls.markerlat.errors.required">
+                      {{'latitudeRequired' | translate}}
+                    </small>
+                    <small class="t-red d-block" *ngIf="markerLatForm.controls.markerlat.errors.minlength">
+                      {{'shortLatitude' | translate}}
+                    </small>
+                    <small class="t-red d-block" *ngIf="markerLatForm.controls.markerlat.errors.maxlength">
+                      {{'longLatitude' | translate}}
+                    </small>
+                    <small class="t-red d-block" *ngIf="markerLatForm.controls.markerlat.errors.pattern">
+                      {{'invalidLatitude' | translate}}
+                    </small>
+                  </div>
+                </div>
+                <div class="col-md-4" fxLayoutAlign="end center">
+                  <button mat-button type="submit" class="bg-blue font-weight-bold">
+                    <i class="im im-sync im-16 pr-2" *ngIf="!markerlatLoading"></i>
+                    <img class="pr-2 image-prealoader" *ngIf="markerlatLoading" src="/assets/images/appIcons/whitespinner.gif">                    
+                    <span>{{'update' | translate}}</span>
+                  </button>
+                </div>
+              </div>
+            </form>
+          </fieldset>
+          <hr>
+          <fieldset>
+            <legend>{{'longitude' | translate}}:</legend>
+            <form [formGroup]="markerLongForm" (ngSubmit)="updateContactLongitude()">
+              <div class="row">
+                <div class="col-md-8">
+                  <mat-form-field class="w-100 pr-4 pl-4">
+                    <span matPrefix><i class="im im-location im-20 mr-1 t-teal"> </i></span>
+                    <input type="text" required name="markerlong" value="{{contactConf.Markerlongi}}" formControlName="markerlong"
+                      class="font-weight-bold" matInput placeholder="{{'longitude' | translate}}" autocomplete="off">
+                  </mat-form-field>
+                  <div class="pr-4 pl-4" *ngIf="markerLongForm.controls.markerlong.touched && markerLongForm.controls.markerlong.errors">
+                    <small class="t-red d-block" *ngIf="markerLongForm.controls.markerlong.errors.required">
+                      {{'longitudeRequired' | translate}}
+                    </small>
+                    <small class="t-red d-block" *ngIf="markerLongForm.controls.markerlong.errors.minlength">
+                      {{'shortLongitude' | translate}}
+                    </small>
+                    <small class="t-red d-block" *ngIf="markerLongForm.controls.markerlong.errors.maxlength">
+                      {{'longLongitude' | translate}}
+                    </small>
+                    <small class="t-red d-block" *ngIf="markerLongForm.controls.markerlong.errors.pattern">
+                      {{'invalidLongitude' | translate}}
+                    </small>
+                  </div>
+                </div>
+                <div class="col-md-4" fxLayoutAlign="end center">
+                  <button mat-button type="submit" class="bg-blue font-weight-bold">
+                    <i class="im im-sync im-16 pr-2" *ngIf="!markerlongLoading"></i>
+                    <img class="pr-2 image-prealoader" *ngIf="markerlongLoading" src="/assets/images/appIcons/whitespinner.gif">                    
+                    <span>{{'update' | translate}}</span>
+                  </button>
+                </div>
+              </div>
+            </form>
+          </fieldset>
+          <hr>
+          <fieldset>
+            <legend>{{'mapApi' | translate}}:</legend>
+            <form [formGroup]="mapApiForm" (ngSubmit)="updateContactMapApi()">
+              <div class="row">
+                <div class="col-md-8">
+                  <mat-form-field class="w-100 pr-4 pl-4">
+                    <span matPrefix><i class="im im-map-o im-20 mr-1 t-teal"> </i></span>
+                    <input type="text" required name="mapapi" value="{{contactConf.mapapi}}" formControlName="mapapi"
+                      class="font-weight-bold" matInput placeholder="{{'mapApi' | translate}}" autocomplete="off">
+                  </mat-form-field>
+                  <div class="pr-4 pl-4" *ngIf="mapApiForm.controls.mapapi.touched && mapApiForm.controls.mapapi.errors">
+                    <small class="t-red d-block" *ngIf="mapApiForm.controls.mapapi.errors.required">
+                      {{'mapapiRequired' | translate}}
+                    </small>
+                    <small class="t-red d-block" *ngIf="mapApiForm.controls.mapapi.errors.minlength">
+                      {{'shortMapApi' | translate}}
+                    </small>
+                    <small class="t-red d-block" *ngIf="mapApiForm.controls.mapapi.errors.maxlength">
+                      {{'longMapApi' | translate}}
+                    </small>
+                  </div>
+                </div>
+                <div class="col-md-4" fxLayoutAlign="end center">
+                  <button mat-button type="submit" class="bg-blue font-weight-bold">
+                    <i class="im im-sync im-16 pr-2" *ngIf="!mapapiLoading"></i>
+                    <img class="pr-2 image-prealoader" *ngIf="mapapiLoading" src="/assets/images/appIcons/whitespinner.gif">                    
+                    <span>{{'update' | translate}}</span>
+                  </button>
+                </div>
+              </div>
+            </form>
+          </fieldset>
+        </div>
+      </div>
+    </div>
+  </div>

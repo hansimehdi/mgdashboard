@@ -1,0 +1,196 @@
+<ng-sidebar-container (onBackdropClicked)="_onBackdropClicked()">
+  <ng-sidebar [(opened)]="_opened" [mode]="_MODES[_modeNum]" [keyClose]="_keyClose" [position]="_POSITIONS[_positionNum]"
+    [dock]="_dock" [dockedSize]="'50px'" [autoCollapseHeight]="_autoCollapseHeight" [autoCollapseWidth]="_autoCollapseWidth"
+    [closeOnClickOutside]="_closeOnClickOutside" [closeOnClickBackdrop]="_closeOnClickBackdrop" [showBackdrop]="_showBackdrop"
+    [animate]="_animate" [trapFocus]="_trapFocus" [autoFocus]="_autoFocus" [sidebarClass]="'demo-sidebar'" [ariaLabel]="'My sidebar'"
+    (onOpenStart)="_onOpenStart()" (onOpened)="_onOpened()" (onCloseStart)="_onCloseStart()" (onClosed)="_onClosed()"
+    (onTransitionEnd)="_onTransitionEnd()" [sidebarClass]="bg-green">
+    <nav class="navbar navbar-expand-lg navbar-light bg-gray-900" fxLayout="row" fxHide="true" fxShow.gt-sm="true">
+      <span fxFlex fxLayout="row" fxLayoutAlign="start center">
+        <a class="navbar-brand t-white font-weight-bold" href="/">{{projectName}}</a>
+      </span>
+      <span fxFlex fxLayout="row" fxLayoutAlign="end center">
+        <i class="fa fa-bars fa-lg" mat-button (click)="_toggleDock()" aria-hidden="true"></i>
+      </span>
+    </nav>
+    <br>
+    <div *ngIf="_dock">
+      <mat-list (click)="switchDashboard()">
+        <span mat-subheader class="bg-red800" fxFlex fxLayout="row" fxLayoutAlign="end center"> <i class="material-icons ml-3 pl-2 t-white">home</i></span>
+      </mat-list>
+      <mat-divider></mat-divider>
+      <mat-list (click)="_toggleDock()">
+        <h3 mat-subheader fxFlex fxLayout="row" fxLayoutAlign="end center"> <i class="im im-server t-white"></i></h3>
+      </mat-list>
+      <mat-divider></mat-divider>
+      <mat-list (click)="_toggleDock()">
+        <h3 mat-subheader fxFlex fxLayout="row" fxLayoutAlign="end center"> <i class="im im-users t-white"></i></h3>
+      </mat-list>
+      <mat-divider></mat-divider>
+      <mat-list (click)="_toggleDock()">
+        <h3 mat-subheader fxFlex fxLayout="row" fxLayoutAlign="end center"> <i class="im im-line-chart-up t-white"></i></h3>
+      </mat-list>
+      <mat-divider></mat-divider>
+      <mat-list (click)="switchContact()">
+        <h3 mat-subheader fxFlex fxLayout="row" fxLayoutAlign="end center"> <i class="material-icons ml-3 pl-2 t-white">contact_phone</i></h3>
+      </mat-list>
+      <mat-list (click)="switchLogs()">
+        <h3 mat-subheader fxFlex fxLayout="row" fxLayoutAlign="end center"> <i class="material-icons ml-3 pl-2 t-white">chrome_reader_mode</i></h3>
+      </mat-list>
+    </div>
+    <div *ngIf="!_dock" class="pt-0 mt-0">
+      <mat-list (click)="_toggleOpened()" class="mt-0 pt-0" fxShow="true" fxHide.gt-sm="true">
+        <h3 mat-subheader> <i class="material-icons pr-2 pl-2 t-white font-weight-bold">arrow_back</i></h3>
+        <mat-divider></mat-divider>
+      </mat-list>
+      <mat-list (click)="switchDashboard()">
+        <h3 mat-subheader class="bg-red800"> <i class="material-icons pr-2 pl-2 t-white">home</i>{{ 'dashboard' |
+          translate}}</h3>
+        <mat-divider></mat-divider>
+      </mat-list>
+      <br>
+      <mat-accordion>
+        <mat-expansion-panel class="bg-gray-800">
+          <mat-expansion-panel-header>
+            <mat-panel-title class="t-white">
+              <i class="im im-server"></i> <span class="mt-1 ml-2">{{ 'mailServer' | translate}}</span>
+            </mat-panel-title>
+            <mat-panel-description class="t-white">
+
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <mat-list class="list-item" (click)="switchReception()">
+            <h3 mat-subheader class="t-white"> <i class="material-icons ft-20 pr-2 pl-2 t-white">call_received</i><span
+                class="ft-16">{{ 'reception' | translate}}</span></h3>
+            <mat-divider></mat-divider>
+          </mat-list>
+          <mat-list class="list-item" (click)="switchEmission()">
+            <h3 mat-subheader class="t-white"> <i class="material-icons ft-20 pr-2 pl-2 t-white">call_made</i><span
+                class="ft-16">{{ 'emission' | translate}}</span></h3>
+            <mat-divider></mat-divider>
+          </mat-list>
+        </mat-expansion-panel>
+        <mat-expansion-panel class="bg-gray-800">
+          <mat-expansion-panel-header>
+            <mat-panel-title class="t-white">
+              <i class="im im-users"></i> <span class="mt-1 ml-2">{{'accountManager' | translate}}</span>
+            </mat-panel-title>
+            <mat-panel-description class="t-white">
+
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <mat-list class="list-item" (click)="switchNewAccount()">
+            <h3 mat-subheader class="t-white"> <i class="material-icons ft-20 pr-2 pl-2 t-white">add</i><span class="ft-16">{{
+                'new' | translate}}</span></h3>
+            <mat-divider></mat-divider>
+          </mat-list>
+          <mat-list class="list-item" (click)="switchAccountsList()">
+            <h3 mat-subheader class="t-white"> <i class="material-icons ft-20 pr-2 pl-2 t-white">list</i><span class="ft-16">{{
+                'list' | translate}}</span></h3>
+            <mat-divider></mat-divider>
+          </mat-list>
+        </mat-expansion-panel>
+        <mat-expansion-panel class="bg-gray-800">
+          <mat-expansion-panel-header>
+            <mat-panel-title class="t-white">
+              <i class="im im-line-chart-up"></i> <span class="mt-1 ml-2">{{'statistics' | translate}}</span>
+            </mat-panel-title>
+            <mat-panel-description class="t-white">
+
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <ul>
+            <li>test</li>
+          </ul>
+        </mat-expansion-panel>
+      </mat-accordion>
+      <mat-list class="list-item" (click)="switchContact()">
+        <h3 mat-subheader class="t-white"> <i class="material-icons pr-2 pl-2 t-white">contact_phone</i>{{ 'contacts' |
+          translate}}</h3>
+        <mat-divider></mat-divider>
+      </mat-list>
+      <mat-list class="list-item" (click)="switchLogs()">
+        <h3 mat-subheader class="t-white"> <i class="material-icons pr-2 pl-2 t-white">chrome_reader_mode</i>{{ 'logs'
+          | translate}}</h3>
+        <mat-divider></mat-divider>
+      </mat-list>
+    </div>
+  </ng-sidebar>
+  <div ng-sidebar-content>
+    <nav class="navbar navbar-expand-md navbar-dark bg-gray-900">
+      <div fxFlex fxLayout="row" fxShow="true" fxHide.gt-sm="true">
+        <div fxFlex fxLayout="row" fxLayoutAlign="start center">
+          <i class="im im-menu pt-1" (click)="_toggleOpened()"></i>
+        </div>
+        <div fxFlex fxLayout="row" fxLayoutAlign="center center">
+          <a class="navbar-brand t-white font-weight-bold" href="/">{{projectName}}</a>
+        </div>
+        <div fxFlex fxLayout="row" fxLayoutAlign="end center">
+          <button class="navbar-toggler hidden-sm-up" type="button" (click)="_toggleNavbar()" data-target="#navbarsDefault"
+            aria-controls="navbarsDefault" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        </div>
+      </div>
+      <div [ngbCollapse]="isNavbarCollapsed" class="collapse navbar-collapse" id="navbarsDefault">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item inline" fxHide="true" fxShow.gt-sm="true">
+            <ngx-avatar *ngIf="!profilePicture" name="{{accountFirstname}} {{accountName}}" size="40" textSizeRatio="2"
+              bgColor="{{_avatarColor}}"></ngx-avatar>
+            <ngx-avatar *ngIf="profilePicture" src="{{serverBase}}{{profilePicture}}" size="40" textSizeRatio="2"></ngx-avatar>
+          </li>
+          <li fxHide="true" fxShow.gt-sm="true" class="nav-item dropdown inline" ngbDropdown [placement]="['bottom-right', 'top-bottom']">
+            <a class="nav-link dropdown-toggle" id="id01" ngbDropdownToggle></a>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="id01" ngbDropdownMenu>
+              <a class="dropdown-item" (click)="switchStettings();"><i class="im im-user-settings im-16 pt-2 pr-2"></i>{{'settings'
+                | translate}}</a>
+              <a class="dropdown-item" (click)="logout();"><i class="im im-sign-out im-16 pt-2 pr-2"></i>{{'logout' |
+                translate}}</a>
+            </div>
+          </li>
+          <li class="ml-4" fxLayout="row">
+            <div fxFlex>
+              <button mat-icon-button [matMenuTriggerFor]="menu" fxShow="true" fxHide.gt-sm="true">
+                <div class="row">
+                  <ngx-avatar *ngIf="!profilePicture" name="{{accountFirstname}} {{accountName}}" size="40" textSizeRatio="2" bgColor="{{_avatarColor}}"></ngx-avatar>
+                  <ngx-avatar *ngIf="profilePicture" src="{{serverBase}}{{profilePicture}}" size="40" textSizeRatio="2"></ngx-avatar>
+                  <mat-icon class="mt-2">more_vert</mat-icon>
+                </div>
+              </button>
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="switchStettings();">
+                  <a class="dropdown-item"><i class="im im-user-settings im-16 pt-2 pr-2"></i>{{'settings' |
+                    translate}}</a>
+                </button>
+                <button mat-menu-item (click)="logout();">
+                  <a class="dropdown-item"><i class="im im-sign-out im-16 pt-2 pr-2"></i>{{'logout' | translate}}</a>
+                </button>
+              </mat-menu>
+            </div>
+            <div fxFlex fxLayout="row" fxLayoutAlign="end center" class="mr-1">
+              <button mat-icon-button [matMenuTriggerFor]="menuAccount">
+                <div class="row">
+                  <ngx-avatar src="../../../assets/images/languages/circle/{{lang}}.png" size="40" textSizeRatio="2"></ngx-avatar>
+                  <mat-icon class="mt-2">more_vert</mat-icon>
+                </div>
+              </button>
+              <mat-menu #menuAccount="matMenu">
+                <button mat-menu-item (click)="changeLang('en');">
+                  <img src="../../../assets/images/languages/en.png" alt="en" style="width: 30px" class="mr-1">
+                  <span>English</span>
+                </button>
+                <button mat-menu-item (click)="changeLang('fr');">
+                  <img src="../../../assets/images/languages/fr.png" alt="fr" style="width: 30px" class="mr-1">
+                  <span>Français</span>
+                </button>
+              </mat-menu>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <section class="demo-contents bg-white">
+      <router-outlet></router-outlet>
+    </section>
+  </div>
+</ng-sidebar-container>

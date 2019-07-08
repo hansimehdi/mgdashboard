@@ -1,0 +1,476 @@
+<div class="progress p-0 m-0" style="height: 4px;" *ngIf="showProgress">
+  <div class="indeterminate-red"></div>
+</div>
+<br>
+<div class="loader" *ngIf="pageLoading">Loading...</div>
+<div class="mt-2 mr-2 ml-2 pb-0 card-1" *ngIf="!pageLoading && account.firstname">
+  <div fxLayout="row" fxLayoutAlign="end start" class="mb-4">
+    <div class="img-thumbnail" (mouseleave)="toggleUpdatePhoto()" (mouseenter)="toggleUpdatePhoto()"
+      (click)="toggleUpdatePhoto()">
+      <ngx-avatar class="account-avatar" src="{{serverBase}}{{account.profilePicture.url}}"
+        *ngIf="account.profilePicture.id" size="150" [round]="false"></ngx-avatar>
+      <ngx-avatar class="account-avatar" name="{{account.firstname}} {{account.username}}"
+        *ngIf="!account.profilePicture.id" size="150" [round]="true"></ngx-avatar>
+      <div class="m-0 p-1 bg-gray-800" *ngIf="hovering" [ngClass]="(hovering)?'translateUp':'hiddenX'"
+        fxLayoutAlign="end center">
+        <i class="fa fa-camera fa-lg t-white p-1" (click)="updateProfilePicture();"></i>
+      </div>
+    </div>
+  </div>
+  <div class="table-responsive" *ngIf="!errorTimeOut">
+    <table class="table">
+      <tbody>
+        <tr>
+          <td class="small no-wrap font-weight-bold">{{'fullName' | translate}}</td>
+          <td class="small no-wrap">{{account.firstname}} {{account.username}}</td>
+          <td class="small no-wrap" fxLayoutAlign="end center"><i class="material-icons ft-20 t-blue"
+              (click)="openUpdateFullName()">edit</i></td>
+        </tr>
+        <tr>
+          <td class="small no-wrap font-weight-bold">E-mail</td>
+          <td class="small no-wrap">{{account.email}}</td>
+          <td class="small no-wrap" fxLayoutAlign="end center"><i class="material-icons ft-20 t-blue"
+              (click)="openUpdateEmail()">edit</i></td>
+        </tr>
+        <tr>
+          <td class="small no-wrap font-weight-bold">{{'phone' | translate}}</td>
+          <td class="small no-wrap">
+            <span *ngIf="account.phone!='0'">
+              {{account.phone}}
+            </span>
+            <span *ngIf="account.phone=='0'" class="t-red">
+              {{'noData' | translate}}
+            </span>
+          </td>
+          <td class="small no-wrap" fxLayoutAlign="end center"><i class="material-icons ft-20 t-blue"
+              (click)="openUpdatePhone()">edit</i></td>
+        </tr>
+        <tr>
+          <td class="small no-wrap font-weight-bold">{{'password' | translate}}</td>
+          <td class="small no-wrap">************</td>
+          <td class="small no-wrap" fxLayoutAlign="end center"><i class="material-icons ft-20 t-blue"
+              (click)="openUpdatePassword()">edit</i></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div *ngIf="errorTimeOut">
+    <div class="alert alert-danger" role="alert" fxLayout="row" fxLayoutAlign="center center">
+      <i class="im im-info pr-2"></i>{{'timeOutError' | translate}}
+    </div>
+  </div>
+</div>
+<mat-divider class="mt-3"></mat-divider>
+<div class="mt-3 ml-2 mr-2" *ngIf="!pageLoading">
+  <mat-toolbar class="bg-deep-purple" fxLayout="row">
+    <div fxFlex="80" fxLayoutAlign="start center">
+      <small fxShow="true" fxHide.gt-sm="true"> <i class="material-icons pr-2">settings</i></small>
+      <span fxHide="true" fxShow.gt-sm="true"><i class="material-icons pr-2">settings</i> {{'accountDetails'
+            | translate}}</span>
+    </div>
+    <div fxFlex="20" fxLayoutAlign="end center" *ngIf="showUpdateButton">
+      <i class="material-icons" ngbTooltip="{{'update' | translate}}" tooltipClass="my-custom-class"
+        (click)="toggleShowDiv()">create</i>
+    </div>
+  </mat-toolbar>
+</div>
+
+<mat-divider></mat-divider>
+<div class="mt-2 mr-2 ml-2 pb-0 card-1" *ngIf="!pageLoading && account.firstname">
+  <div class="row" [@slideInOut]="animationState">
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <tbody>
+          <tr>
+            <td class="font-weight-bold t-teal"><i class="im im-server pr-2 im-16"></i>{{'domain' | translate}}</td>
+            <td><small *ngIf="details.domain">{{details.domain}}</small></td>
+          </tr>
+          <tr>
+            <td class="font-weight-bold t-teal"><i class="im im-barcode pr-2 im-16"></i>{{'trn' | translate}}</td>
+            <td><small *ngIf="details.trn" class="text-uppercase">{{details.trn | uppercase}}</small></td>
+          </tr>
+          <tr>
+            <td class="font-weight-bold t-teal"><i class="im im-users pr-2 im-16"></i>{{'empNum' | translate}}</td>
+            <td><small *ngIf="details.empNum" class="text-uppercase">{{details.empNum | uppercase}}</small></td>
+          </tr>
+          <tr>
+            <td class="font-weight-bold t-teal"><i class="im im-coin pr-2 im-16"></i>{{'capital' | translate}}</td>
+            <td><small *ngIf="details.capital" class="text-uppercase">{{details.capital | uppercase}}</small></td>
+          </tr>
+          <tr>
+            <td class="font-weight-bold t-teal"><i class="im im-location pr-2 im-16"></i>{{'address' | translate}}</td>
+            <td><small *ngIf="details.address" class="text-uppercase">{{details.address | uppercase}}</small></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="row" [@slideInOut]="animationStateReverse" *ngIf="detailForm">
+    <div fxLayout="column" class="progress p-0 m-4" *ngIf="showUploadProgress" style="height: 4px;">
+      <div class="indeterminate"></div>
+    </div>
+    <form [formGroup]="detailForm" (ngSubmit)="updateDetails()" class="w-100 h-100 pb-5">
+      <div class="row pb-2">
+        <div class="col-md-12">
+          <mat-form-field class="w-100 pr-4 pl-4">
+            <span matPrefix><i class="fa fa-server fa-lg   mr-1 t-pink"> </i></span>
+            <input type="text" required name="domain" formControlName="domain" class="font-weight-bold" matInput
+              placeholder="{{'domain' | translate}}" autocomplete="off">
+          </mat-form-field>
+          <div class="pr-4 pl-4" *ngIf="detailForm.controls.domain.touched && detailForm.controls.domain.errors">
+            <small class="t-red d-block" *ngIf="detailForm.controls.domain.errors.required">
+              {{'domainRequired' | translate}}
+            </small>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <mat-form-field class="w-100 pr-4 pl-4">
+            <span matPrefix><i class="im im-barcode  mr-1 t-pink"> </i></span>
+            <input type="text" required name="trn" formControlName="trn" class="font-weight-bold" matInput
+              placeholder="{{'trn' | translate}}" autocomplete="off">
+          </mat-form-field>
+          <div class="pr-4 pl-4" *ngIf="detailForm.controls.trn.touched && detailForm.controls.trn.errors">
+            <small class="t-red d-block" *ngIf="detailForm.controls.trn.errors.required">
+              {{'trnRequired' | translate}}
+            </small>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <mat-form-field class="w-100 pr-4 pl-4">
+            <span matPrefix><i class="im im-users  mr-1 t-pink"> </i></span>
+            <input type="text" required name="empNum" formControlName="empNum" class="font-weight-bold" matInput
+              placeholder="{{'empNum' | translate}}" autocomplete="off">
+          </mat-form-field>
+          <div class="pr-4 pl-4" *ngIf="detailForm.controls.empNum.touched && detailForm.controls.empNum.errors">
+            <small class="t-red d-block" *ngIf="detailForm.controls.empNum.errors.required">
+              {{'empNumRequired' | translate}}
+            </small>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <mat-form-field class="w-100 pr-4 pl-4">
+            <span matPrefix><i class="im im-coin  mr-1 t-pink"> </i></span>
+            <input type="text" required name="capital" formControlName="capital" class="font-weight-bold" matInput
+              placeholder="{{'capital' | translate}}" autocomplete="off">
+          </mat-form-field>
+        </div>
+        <div class="col-md-12">
+          <mat-form-field class="w-100 pr-4 pl-4">
+            <span matPrefix><i class="im im-location  mr-1 t-pink"> </i></span>
+            <input type="text" required name="address" formControlName="address" class="font-weight-bold" matInput
+              placeholder="{{'address' | translate}}" autocomplete="off">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="pl-4 pr-4" fxLayout="row" fxHide="true" fxShow.gt-sm="true">
+        <div fxFlex fxLayoutAlign="start center">
+          <button mat-button class="bg-red font-weight-bold w-50" type="button" (click)="toggleShowDiv()"><i
+              class="material-icons pr-2">cancel_presentation</i>{{'cancel'
+                | translate}}</button>
+        </div>
+        <div fxFlex fxLayoutAlign="end center">
+          <button mat-button class="bg-green font-weight-bold w-50"><i
+              class="material-icons pr-2 t-white">update</i><span class="t-white">{{'update'
+                  | translate}}</span></button>
+        </div>
+      </div>
+      <div class="pl-4 pr-4" fxLayout="row" fxShow="true" fxHide.gt-sm="true">
+        <div fxFlex fxLayoutAlign="start center">
+          <button mat-button class="bg-red font-weight-bold w-50" type="button" (click)="toggleShowDiv()"><i
+              class="material-icons pr-2">cancel_presentation</i></button>
+        </div>
+        <div fxFlex fxLayoutAlign="end center">
+          <button mat-button class="bg-green font-weight-bold w-50"><i
+              class="material-icons pr-2 t-white">update</i></button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<ngx-smart-modal #updatePhotoModal identifier="updatePhotoModal" customClass="nsm-dialog-animation-btt"
+  escapable="true">
+  <form>
+    <h5 class="t-teal"><i class="im im-picture-o pr-2 t-black" style="font-size:30px;"></i><span>{{'profilePicture' |
+          translate}}</span></h5>
+    <hr>
+    <div fxLayout="column">
+      <div fxLayout="column" class="mt-3" *ngIf="!validExt || !validSize">
+        <div class="alert alert-danger d-block" *ngIf="!validExt" role="alert">
+          <strong>{{'error' | translate}} !</strong> {{'allowedFormat' | translate }} image/jpg , image/jpeg ,
+          image/png
+        </div>
+        <div class="alert alert-danger d-block" *ngIf="!validSize" role="alert">
+          <strong>{{'error' | translate}} !</strong> {{'maxImageSize' | translate }} {{AllowedSize}} Mo
+        </div>
+      </div>
+      <div fxLayout="column" *ngIf="imageSrc && showUploadProgress" class="progress p-0 m-0" style="height: 4px;">
+        <div class="indeterminate"></div>
+      </div>
+      <div class="m-3" fxLayout="row" fxLayoutAlign="center center" *ngIf="imageSrc">
+        <div fxLayout="row" class="img-thumbnail w-100">
+          <img src="{{imageSrc}}" class="h-50">
+        </div>
+      </div>
+      <div fxLayout="row" class="text-center" fxLayoutAlign="center center">
+        <input type="file" name="file" id="file" accept="image/*" class="inputfile" (change)="readURL($event);" />
+        <label for="file" class="w-100 bg-green mr-4 ml-4 p-2 font-weight-bold">
+          <span class="t-white" *ngIf="!imageSrc">{{'chooseImage' | translate}}</span>
+          <span class="t-white" *ngIf="imageSrc">{{'changeImage' | translate}}</span>
+        </label>
+      </div>
+    </div>
+    <hr>
+    <div fxLayout="row">
+      <div fxFlex="50" fxLayoutAlign="start center">
+        <button mat-raised-button class="bg-blue font-weight-bold" (click)="cancelUplaod();"><i
+            class="material-icons pr-2">cancel</i><span fxHide="true" fxShow.gt-sm="true">{{'cancel'
+              | translate}}</span></button>
+      </div>
+      <div fxFlex="50" fxLayoutAlign="end center">
+        <button mat-raised-button class="bg-deep-purple font-weight-bold" (click)="uploadProfilePicture()"
+          [disabled]="!imageSrc || !validExt || !validSize"><i class="material-icons pr-2">cloud_upload</i><span
+            fxHide="true" fxShow.gt-sm="true">{{'upload'
+              | translate}}</span></button>
+      </div>
+    </div>
+  </form>
+</ngx-smart-modal>
+<ngx-smart-modal #FullNameUpdateModal identifier="FullNameUpdateModal" customClass="nsm-dialog-animation-btt"
+  escapable="true">
+  <form [formGroup]="fullNameForm" (ngSubmit)="proceedUpdateFullName();">
+    <h5 class="t-teal"> <i class="im im-users pr-2 t-black" style="font-size:30px;"></i>{{'fullName' | translate}}</h5>
+    <hr>
+    <div class="row">
+      <mat-form-field class="w-100 pr-4 pl-4">
+        <span matPrefix><i class="im im-user-male mr-1 t-deep-purple"> </i></span>
+        <input matInput required name="firstname" type="text" formControlName="firstname"
+          placeholder="{{'firstname' | translate}}" autocomplete="off">
+      </mat-form-field>
+      <div class="pr-4 pl-4" *ngIf="fullNameForm.controls.firstname.touched && fullNameForm.controls.firstname.errors">
+        <small class="t-red  d-block" *ngIf="fullNameForm.controls.firstname.errors.required">
+          {{'firstnameRequired' | translate}}
+        </small>
+        <small class="t-red  d-block" *ngIf="fullNameForm.controls.firstname.errors.minlength">
+          {{'shortFirstname' | translate}}
+        </small>
+        <small class="t-red  d-block" *ngIf="fullNameForm.controls.firstname.errors.maxlength">
+          {{'longFirstname' | translate}}
+        </small>
+      </div>
+    </div>
+    <div class="row">
+      <mat-form-field class="w-100 pr-4 pl-4">
+        <span matPrefix><i class="im im-user-circle mr-1 t-deep-purple"> </i></span>
+        <input matInput required name="username" type="text" formControlName="username"
+          placeholder="{{'_name' | translate}}" autocomplete="off">
+      </mat-form-field>
+      <div class="pr-4 pl-4" *ngIf="fullNameForm.controls.username.touched && fullNameForm.controls.username.errors">
+        <small class="t-red  d-block" *ngIf="fullNameForm.controls.username.errors.required">
+          {{'usernameRequired' | translate}}
+        </small>
+        <small class="t-red  d-block" *ngIf="fullNameForm.controls.username.errors.minlength">
+          {{'shortName' | translate}}
+        </small>
+        <small class="t-red  d-block" *ngIf="fullNameForm.controls.username.errors.minlength">
+          {{'longName' | translate}}
+        </small>
+      </div>
+
+    </div>
+    <div class="row">
+      <mat-form-field class="w-100 pr-4 pl-4">
+        <span matPrefix><i class="im im-lock mr-1 t-deep-purple"> </i></span>
+        <input matInput required name="password" type="password" formControlName="password"
+          placeholder="{{'password' | translate}}" autocomplete="off">
+      </mat-form-field>
+      <div class="pr-4 pl-4" *ngIf="fullNameForm.controls.password.touched && fullNameForm.controls.password.errors">
+        <small class="t-red  d-block" *ngIf="fullNameForm.controls.password.errors.required">
+          {{'passwordRequired' | translate}}
+        </small>
+      </div>
+    </div>
+    <hr>
+    <div fxLayout="row">
+      <div fxFlex="50" fxLayoutAlign="start center">
+        <button mat-raised-button type="button" class="bg-blue font-weight-bold" (click)="cancelUpdateFullName()"><i
+            class="im im-x-mark-circle t-white mr-2 im-16"></i>
+          <span fxHide="true" fxShow.gt-sm="true">{{'cancel' | translate}}</span></button>
+      </div>
+      <div fxFlex="50" fxLayoutAlign="end center">
+        <button mat-raised-button class="bg-deep-purple font-weight-bold" type="submit"><i
+            class="im im-sync t-white mr-2 im-16"></i>
+          <span fxHide="true" fxShow.gt-sm="true">{{'update' | translate}}</span></button>
+      </div>
+    </div>
+  </form>
+</ngx-smart-modal>
+<ngx-smart-modal #EmailUpdateModal identifier="EmailUpdateModal" customClass="nsm-dialog-animation-btt"
+  escapable="true">
+  <form [formGroup]="EmailForm" (ngSubmit)="proceedUpdateEmail();">
+    <h5 class="t-teal"> <i class="im im-mail pr-2 t-black" style="font-size:30px;"></i>{{'E-mail' | translate}}</h5>
+    <hr>
+    <div class="row">
+      <mat-form-field class="w-100 pr-4 pl-4">
+        <span matPrefix><i class="im im-mail mr-1 t-deep-purple"> </i></span>
+        <input matInput required name="email" type="text" formControlName="email" placeholder="{{'E-mail' | translate}}"
+          autocomplete="off">
+      </mat-form-field>
+      <div class="pr-4 pl-4" *ngIf="EmailForm.controls.email.touched && EmailForm.controls.email.errors">
+        <small class="t-red  d-block" *ngIf="EmailForm.controls.email.errors.required">
+          {{'emailRequired' | translate}}
+        </small>
+        <small class="t-red  d-block" *ngIf="EmailForm.controls.email.errors.minlength">
+          {{'shortEmail' | translate}}
+        </small>
+        <small class="t-red  d-block" *ngIf="EmailForm.controls.email.errors.maxlength">
+          {{'longEmail' | translate}}
+        </small>
+        <small class="t-red  d-block" *ngIf="EmailForm.controls.email.errors.pattern">
+          {{'invalidEmail' | translate}}
+        </small>
+      </div>
+    </div>
+    <div class="row">
+      <mat-form-field class="w-100 pr-4 pl-4">
+        <span matPrefix><i class="im im-lock mr-1 t-deep-purple"> </i></span>
+        <input matInput required name="password" type="password" formControlName="password"
+          placeholder="{{'password' | translate}}" autocomplete="off">
+      </mat-form-field>
+      <div class="pr-4 pl-4" *ngIf="EmailForm.controls.password.touched && EmailForm.controls.password.errors">
+        <small class="t-red  d-block" *ngIf="EmailForm.controls.password.errors.required">
+          {{'passwordRequired' | translate}}
+        </small>
+      </div>
+    </div>
+    <hr>
+    <div fxLayout="row">
+      <div fxFlex="50" fxLayoutAlign="start center">
+        <button mat-raised-button type="button" class="bg-blue font-weight-bold" (click)="cancelUpdateEmail()"><i
+            class="im im-x-mark-circle t-white mr-2 im-16"></i>
+          <span fxHide="true" fxShow.gt-sm="true">{{'cancel' | translate}}</span></button>
+      </div>
+      <div fxFlex="50" fxLayoutAlign="end center">
+        <button mat-raised-button class="bg-deep-purple font-weight-bold" type="submit"><i
+            class="im im-sync t-white mr-2 im-16"></i>
+          <span fxHide="true" fxShow.gt-sm="true">{{'update' | translate}}</span></button>
+      </div>
+    </div>
+  </form>
+</ngx-smart-modal>
+<ngx-smart-modal #PhoneUpdateModal identifier="PhoneUpdateModal" customClass="nsm-dialog-animation-btt"
+  escapable="true">
+  <form [formGroup]="phoneForm" (ngSubmit)="proceedUpdatePhone();">
+    <h5 class="t-teal"> <i class="im im-phone pr-2 t-black" style="font-size:30px;"></i>{{'phone' | translate}}</h5>
+    <hr>
+    <div class="row">
+      <mat-form-field class="w-100 pr-4 pl-4">
+        <span matPrefix><i class="im im-phone mr-1 t-deep-purple"> </i></span>
+        <input matInput required name="phone" type="text" formControlName="phone" placeholder="{{'phone' | translate}}"
+          autocomplete="off">
+      </mat-form-field>
+      <div class="pr-4 pl-4" *ngIf="phoneForm.controls.phone.touched && phoneForm.controls.phone.errors">
+        <small class="t-red  d-block" *ngIf="phoneForm.controls.phone.errors.required">
+          {{'phoneRequired' | translate}}
+        </small>
+        <small class="t-red  d-block" *ngIf="phoneForm.controls.phone.errors.minlength">
+          {{'shortPhone' | translate}}
+        </small>
+        <small class="t-red  d-block" *ngIf="phoneForm.controls.phone.errors.maxlength">
+          {{'longPhone' | translate}}
+        </small>
+        <small class="t-red  d-block" *ngIf="phoneForm.controls.phone.errors.pattern">
+          {{'invalidPhone' | translate}}
+        </small>
+      </div>
+    </div>
+    <div class="row">
+      <mat-form-field class="w-100 pr-4 pl-4">
+        <span matPrefix><i class="im im-lock mr-1 t-deep-purple"> </i></span>
+        <input matInput required name="password" type="password" formControlName="password"
+          placeholder="{{'password' | translate}}" autocomplete="off">
+      </mat-form-field>
+      <div class="pr-4 pl-4" *ngIf="phoneForm.controls.password.touched && phoneForm.controls.password.errors">
+        <small class="t-red  d-block" *ngIf="phoneForm.controls.password.errors.required">
+          {{'passwordRequired' | translate}}
+        </small>
+      </div>
+    </div>
+    <hr>
+    <div fxLayout="row">
+      <div fxFlex="50" fxLayoutAlign="start center">
+        <button mat-raised-button type="button" class="bg-blue font-weight-bold" (click)="cancelUpdatePhone()"><i
+            class="im im-x-mark-circle t-white mr-2 im-16"></i>
+          <span fxHide="true" fxShow.gt-sm="true">{{'cancel' | translate}}</span></button>
+      </div>
+      <div fxFlex="50" fxLayoutAlign="end center">
+        <button mat-raised-button class="bg-deep-purple font-weight-bold" type="submit"><i
+            class="im im-sync t-white mr-2 im-16"></i>
+          <span fxHide="true" fxShow.gt-sm="true">{{'update' | translate}}</span></button>
+      </div>
+    </div>
+  </form>
+</ngx-smart-modal>
+<ngx-smart-modal #PasswordUpdateModal identifier="PasswordUpdateModal" customClass="nsm-dialog-animation-btt"
+  escapable="true">
+  <form [formGroup]="passwordForm" (ngSubmit)="proceedUpdatePassword();">
+    <h5 class="t-teal"> <i class="im im-lock pr-2 t-black" style="font-size:30px;"></i>{{'password' | translate}}</h5>
+    <hr>
+    <div class="row">
+      <mat-form-field class="w-100 pr-4 pl-4">
+        <span matPrefix><i class="im im-lock mr-1 t-deep-purple"> </i></span>
+        <input matInput required name="currentpassword" type="password" formControlName="currentpassword"
+          placeholder="{{'currentPassword' | translate}}" autocomplete="off">
+      </mat-form-field>
+      <div class="pr-4 pl-4"
+        *ngIf="passwordForm.controls.currentpassword.touched && passwordForm.controls.currentpassword.errors">
+        <small class="t-red  d-block" *ngIf="passwordForm.controls.currentpassword.errors.required">
+          {{'passwordRequired' | translate}}
+        </small>
+      </div>
+    </div>
+    <div class="row">
+      <mat-form-field class="w-100 pr-4 pl-4">
+        <span matPrefix><i class="im im-lock mr-1 t-deep-purple"> </i></span>
+        <input matInput required name="password" type="password" formControlName="password"
+          placeholder="{{'newPassword' | translate}}" autocomplete="off">
+      </mat-form-field>
+      <div class="pr-4 pl-4" *ngIf="passwordForm.controls.password.touched && passwordForm.controls.password.errors">
+        <small class="t-red  d-block" *ngIf="passwordForm.controls.password.errors.required">
+          {{'passwordRequired' | translate}}
+        </small>
+        <small class="t-red  d-block" *ngIf="passwordForm.controls.password.errors.minlength">
+          {{'shortPassword' | translate}}
+        </small>
+      </div>
+    </div>
+    <div class="row">
+      <mat-form-field class="w-100 pr-4 pl-4">
+        <span matPrefix><i class="im im-lock mr-1 t-deep-purple"> </i></span>
+        <input matInput required name="passwordconf" type="password" formControlName="passwordconf"
+          placeholder="{{'passwordConf' | translate}}" autocomplete="off">
+      </mat-form-field>
+      <div class="pr-4 pl-4"
+        *ngIf="passwordForm.controls.passwordconf.touched && passwordForm.controls.passwordconf.errors">
+        <small class="t-red  d-block" *ngIf="passwordForm.controls.passwordconf.errors.required">
+          {{'passwordRequired' | translate}}
+        </small>
+        <small class="t-red  d-block" *ngIf="passwordForm.controls.passwordconf.errors.mismatch">
+          {{'passwordMismatch' | translate}}
+        </small>
+      </div>
+    </div>
+    <hr>
+    <div fxLayout="row">
+      <div fxFlex="50" fxLayoutAlign="start center">
+        <button mat-raised-button type="button" class="bg-blue font-weight-bold" (click)="cancelUpdatePassword()"><i
+            class="im im-x-mark-circle t-white mr-2 im-16"></i>
+          <span fxHide="true" fxShow.gt-sm="true">{{'cancel' | translate}}</span></button>
+      </div>
+      <div fxFlex="50" fxLayoutAlign="end center">
+        <button mat-raised-button class="bg-deep-purple font-weight-bold" type="submit"><i
+            class="im im-sync t-white mr-2 im-16"></i>
+          <span fxHide="true" fxShow.gt-sm="true">{{'update' | translate}}</span></button>
+      </div>
+    </div>
+  </form>
+</ngx-smart-modal>

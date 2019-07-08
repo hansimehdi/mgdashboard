@@ -1,0 +1,71 @@
+<div class="progress p-0 m-0" style="height: 4px;" *ngIf="showProgress">
+  <div class="indeterminate"></div>
+</div>
+<br>
+<mat-divider></mat-divider>
+<mat-list role="list">
+  <mat-list-item role="listitem" fxLayout="row">
+    <h6 class="material-font">{{'dashboard' | translate}} <i class="im im-angle-right im-10"></i> {{'logs' |
+      translate}}</h6>
+  </mat-list-item>
+</mat-list>
+<mat-divider></mat-divider>
+<div class="loader" *ngIf="pageLoading">Loading...</div>
+<div class="mt-3 ml-2 mr-2" *ngIf="!pageLoading">
+  <div class="row ml-1 mr-1">
+    <div class="table-responsive pb-3">
+      <table class="table card-1">
+        <thead>
+          <tr class="bg-blue">
+            <th scope="col" class="no-wrap"><i class="im im-date-o im-16"></i> Date</th>
+            <th scope="col" class="no-wrap"><i class="im im-bell-active im-16"> </i>Action</th>
+            <th scope="col" class="no-wrap"><i class="im im-user-circle im-16"> </i>{{'account' | translate}}</th>
+            <th scope="col" class="no-wrap"><i class="im im-sitemap im-16"> </i> IP</th>
+            <th scope="col" class="no-wrap"><i class="im im-chrome im-16"> </i> {{'browser' | translate}}</th>
+            <th scope="col" class="no-wrap"><i class="im im-monitor-o im-16"> </i> {{'device' | translate}}</th>
+            <th scope="col" class="no-wrap"><i class="im im-location im-16"> </i> {{'country' | translate}}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let log of Logs;">
+            <td class="small no-wrap">{{log.logDT | date : "dd-MM-y"}} {{'at' | translate}} {{log.logDT | date : "HH:mm"}}</td>
+            <td class="small no-wrap">
+              <span *ngIf="log.stringCode=='1'">{{'logIn' | translate}}</span>
+              <span *ngIf="log.stringCode=='0'">{{'logOut' | translate}}</span>
+            </td>
+            <td class="small no-wrap t-blue" (click)="goAccountInfo(log.accId);">{{log.email}}</td>
+            <td class="small no-wrap">{{log.ip}}</td>
+            <td class="small no-wrap">{{log.agent}}</td>
+            <td class="small no-wrap">{{log.device}}</td>
+            <td class="small no-wrap">
+              <span *ngIf="log.country!=''">{{log.country}}</span>
+              <span *ngIf="log.country==''" class="t-red">{{'noData' | translate}}</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="row ml-1 mr-1 pb-5" fxHide="true" fxHide.gt-sm="false" fxLayout="row" fxLayoutAlign="center center"
+      *ngIf="permitLoading">
+      <button mat-button (click)="loadMoreLogs()" class="bg-green t-white w-25" [disabled]="isLoading">
+        <span *ngIf="!isLoading">
+          <i class="material-icons">cloud_download</i><span class="font-weight-bold"> {{'loadMore' | translate}}</span>
+        </span>
+        <span *ngIf="isLoading">
+          <span class="font-weight-bold">{{'loading' | translate}}</span> <img style="width: 7%;" src="/assets/images/appIcons/preloader.gif">
+        </span>
+      </button>
+    </div>
+    <div class="row ml-1 mr-1 pb-5" fxShow="true" fxHide.gt-sm="true" fxLayout="row" fxLayoutAlign="center center"
+      *ngIf="permitLoading">
+      <button mat-button (click)="loadMoreLogs()" class="bg-green t-white w-75" [disabled]="isLoading">
+        <span *ngIf="!isLoading">
+          <i class="material-icons">cloud_download</i><span class="font-weight-bold"> {{'loadMore' | translate}}</span>
+        </span>
+        <span *ngIf="isLoading">
+          <span class="font-weight-bold">{{'loading' | translate}}</span> <img style="width: 7%;" src="/assets/images/appIcons/preloader.gif">
+        </span>
+      </button>
+    </div>
+</div>

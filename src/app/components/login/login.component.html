@@ -1,0 +1,95 @@
+<div class="container-fluid mt-5">
+  <div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+      <mat-card class="example-card">
+        <div class="d-flex justify-content-center pt-2">
+          <img mat-card-image class="w-100" src="https://www.computerdealernews.com/wp-content/uploads/2013/12/security-data-lock-and-finger-with-key.jpg"
+            alt="Photo of a Shiba Inu">
+        </div>
+        <hr>
+        <div class="progress p-0 m-0" style="height: 4px;" *ngIf="showProgress">
+          <div class="indeterminate"></div>
+        </div>
+        <mat-card-content class="pt-2">
+          <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-10">
+              <div class="alert alert-danger" *ngIf="showError" role="alert">
+                <div class="row">
+                  <b class="mr-1 ml-1">{{'error' | translate}} ! </b><span class="mr-1 ml-1"> {{errorLogin |
+                    translate}}</span>
+                </div>
+                <div class="row" *ngIf="showAttmpts && showAttmpts <=5">
+                  <span class="mr-1 ml-1">{{'youStillHave' | translate}}</span>
+                  <span class="mr-1 ml-1">{{attempts}}</span>
+                  <span class="mr-1 ml-1" *ngIf="attempts>=2">{{'attempts' | translate}}</span>
+                  <span class="mr-1 ml-1" *ngIf="attempts<2">{{'attempt' | translate}}</span>
+                </div>
+              </div>
+              <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 100%"></div>
+              <form #loginForm="ngForm" novalidate (ngSubmit)="loginUser()">
+                <div class="row m-2">
+                  <mat-form-field class="w-100">
+                    <span matPrefix><i class="fa fa-user fa-lg fa-2x mr-1 t-blue"> </i></span>
+                    <input type="text" name="username" #username="ngModel" class="font-weight-bold" required matInput
+                      placeholder="{{'username' | translate}}" [(ngModel)]="login.username" autocomplete="off">
+                    <mat-hint align="end">{{login.username.length}} / 40</mat-hint>
+                  </mat-form-field>
+                  <small class="t-red" [class.d-none]="username.valid || username.untouched">{{'usernameRequired' |
+                    translate}}</small>
+                  <mat-form-field class="w-100 pt-3">
+                    <span matPrefix><i class="fa fa-lock fa-lg fa-2x mr-1 t-blue"> </i></span>
+                    <input type="password" #password="ngModel" name="password" class="font-weight-bold" required
+                      matInput placeholder="{{'password' | translate}}" [(ngModel)]="login.password" autocomplete="off">
+                  </mat-form-field>
+                  <small class="t-red" [class.d-none]="password.valid || password.untouched">{{'passwordRequired' |
+                    translate}}</small>
+
+                </div>
+                <div class="row mt-2">
+                  <div class="col-md-4"></div>
+                  <div class="col-md-4">
+                    <button mat-raised-button type="submit" [disabled]="!loginForm.valid" class="bg-green font-weight-bold btn-block disabled"><i
+                        class="material-icons">send</i> {{ 'login' | translate}}</button>
+                  </div>
+                  <div class="col-md-4"></div>
+                </div>
+              </form>
+            </div>
+            <div class="col-md-1"></div>
+          </div>
+        </mat-card-content>
+        <mat-divider></mat-divider>
+        <mat-card-actions>
+          <div class="row">
+            <div class="col-md-6 col-lg-6 col-xl-6">
+              <a href="" (click)="forgotPassword()"><i class="fa fa-info-circle mr-1"></i>{{ 'forgotPassword' |
+                translate}}</a>
+            </div>
+            <div class="col-md-6 col-lg-6 col-xl-6 d-flex justify-content-end">
+              <button mat-icon-button [matMenuTriggerFor]="menu">
+                <div class="row">
+                  <img src="../../../assets/images/languages/circle/{{lang}}.png" alt="en" style="width: 30px !important;height: 30px;">
+                  <mat-icon class="mt-1">more_vert</mat-icon>
+                </div>
+              </button>
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="changeLang('en');">
+                  <img src="../../../assets/images/languages/en.png" alt="en" style="width: 30px !important" class="mr-1">
+                  <span>English</span>
+                </button>
+                <button mat-menu-item (click)="changeLang('fr');">
+                  <img src="../../../assets/images/languages/fr.png" alt="fr" style="width: 30px !important" class="mr-1">
+                  <span>Français</span>
+                </button>
+              </mat-menu>
+
+            </div>
+          </div>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+    <div class="col-md-3"></div>
+  </div>
+</div>

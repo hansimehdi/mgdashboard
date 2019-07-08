@@ -1,0 +1,47 @@
+<div class="progress p-0 m-0" style="height: 4px;" *ngIf="showProgress">
+  <div class="indeterminate-red"></div>
+</div>
+<div class="loader" *ngIf="pageLoading">Loading...</div>
+<div class="mt-3 ml-2 mr-2" *ngIf="!pageLoading">
+  <div class="container card-1 mt-3 pb-3">
+    <div class="row">
+      <div class="col-md-6">
+        <span class="d-flex justify-content-start">
+          <h6 class="t-blue font-weight-bold"><span class="t-black">{{'enterprise' | translate}} :
+            </span>{{offer.Account.username}}</h6>
+        </span>
+      </div>
+      <div class="col-md-6">
+        <span class="d-flex justify-content-end small t-gray">
+          {{offer.insertionDate | date : "dd-MM-y"}}
+        </span>
+      </div>
+    </div>
+    <hr>
+    <p>{{offer.description}}</p>
+    <hr>
+    <a class="t-black pl-2"><i class="im im-thumb-up pr-2" [ngClass]="{'t-pink': isIN(offer.Interested)==='OK'}"
+        *ngIf="isUser()" (click)="addInterested(offer.id)"></i>{{'interested' | translate}}
+      ({{offer.Interested.length}})</a>
+    <div class="row" *ngIf="isOwned()">
+      <div class="col-md-12">
+        <button class="btn btn-sm btn-danger float-right"
+          (click)="deleteOffer(offer.id)">{{'delete' | translate}}</button>
+      </div>
+    </div>
+    <hr>
+    <div class="ml-3" *ngIf="isEnterprise() && isOwned() && offer.Interested.length>0">
+      <h3 class="t-purple">{{'interestedList' | translate}}</h3>
+      <ul class="list-group" *ngFor="let i of offer.Interested">
+        <li class="list-group-item pt-2 mt-2">
+          <span class="t-orange font-weight-bold">{{'fullName' | translate}}</span><span
+            class="pl-3">{{i.Account.firstname}} {{i.Account.username}}</span><br>
+          <span class="t-orange font-weight-bold">{{'phone' | translate}}</span><span
+            class="pl-3">{{i.Account.phone}}</span><br>
+          <span class="t-orange font-weight-bold">{{'E-mail' | translate}}</span><span
+            class="pl-3">{{i.Account.email}}</span><br>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

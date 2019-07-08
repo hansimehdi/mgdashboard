@@ -1,0 +1,44 @@
+<div class="progress p-0 m-0" style="height: 4px;" *ngIf="showProgress">
+  <div class="indeterminate-red"></div>
+</div>
+<div class="loader" *ngIf="pageLoading">Loading...</div>
+<div class="mt-3 ml-2 mr-2" *ngIf="!pageLoading && specifications.length>0">
+  <div class="container card-1 mt-3 pb-3" *ngFor="let specs of specifications" (click)="view(specs.id)">
+    <div class="row">
+      <div class="col-md-6">
+        <span class="d-flex justify-content-start">
+          <h6 class="t-green font-weight-bold"><span class="t-black">{{'enterprise' | translate}} :
+            </span>{{specs.Enterprise.username}}</h6>
+        </span>
+      </div>
+      <div class="col-md-6">
+        <span class="d-flex justify-content-end small t-gray">
+          {{specs.insertionDate | date : "dd-MM-y"}}
+        </span>
+      </div>
+    </div>
+    <hr>
+    <p>{{specs.description}}</p>
+    <br>
+    <hr>
+    <div class="row">
+      <div class="col-md-6">
+        <a class="t-blue pl-2 d-flex justify-content-start" (click)="addComment(specs.id)"><i
+            class="im im-speech-bubble-comment t-blue pr-2"></i><span
+            class="t-pink font-weight-bold">{{'comments' | translate}}
+            ({{specs.Comments.length}})</span></a>
+      </div>
+      <div class="col-md-6">
+        <a href="{{serverBase}}{{specs.pdfUrl}}" target="_blank"
+          class="d-flex justify-content-end t-blue small">{{'Download' | translate}} PDF</a>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="mt-3 ml-2 mr-2" *ngIf="!pageLoading && specifications.length<=0">
+  <div class="container card-1">
+    <div class="alert alert-info text-center" role="alert">
+      <strong>{{'emptyList' | translate}}</strong>
+    </div>
+  </div>
+</div>

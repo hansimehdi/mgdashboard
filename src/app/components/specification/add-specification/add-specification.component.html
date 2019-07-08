@@ -1,0 +1,49 @@
+<div class="progress p-0 m-0" style="height: 4px;" *ngIf="showProgress">
+  <div class="indeterminate-red"></div>
+</div>
+<div class="loader" *ngIf="pageLoading">Loading...</div>
+<div class="mt-3 ml-2 mr-2" *ngIf="!pageLoading">
+  <div class="container card-1">
+    <div class="row pb-3">
+      <div class="col-md-12 center-text">
+        <h1 class="t-purple font-weight-bold">{{'addSpecification' | translate}}</h1>
+      </div>
+    </div>
+    <hr>
+    <div class="row pb-3 pt-2">
+      <form [formGroup]="specificationForm" (ngSubmit)="addSpecification()" novalidate="true">
+        <div class="row">
+          <div class="col-md-12 d-block mx-auto">
+            <div class="container">
+              <div class="form-group w-100 d-block mx-auto">
+                <label for="exampleFormControlTextarea1" class="t-blue font-weight-bold"><i
+                    class="im im-file-o im-16 pr-2 font-weight-bold"></i> Description</label>
+                <textarea class="form-control w-100" required name="description" formControlName="description"
+                  id="exampleFormControlTextarea1" rows="7" cols="150"></textarea>
+                <div class="pt-2"
+                  *ngIf="specificationForm.controls.description.touched && specificationForm.controls.description.errors">
+                  <small class="t-red d-block" *ngIf="specificationForm.controls.description.errors.required">
+                    {{'desciptionRequired' | translate}}
+                  </small>
+                </div>
+              </div>
+              <div class="form-group  w-100 d-block mx-auto">
+                <label for="specationPdf" class="t-blue font-weight-bold"><i
+                    class="im im-note-o im-16 pr-2 font-weight-bold"></i>{{'specationFile' | translate}} <span
+                    class="pr-2 t-red small">(max 200Ko)</span></label>
+                <input type="file" name="specationPdf" class="form-control-file" id="specationPdf">
+              </div>
+              <div class="pt-2" *ngIf="pdfMissing">
+                <span class="t-red small">{{'specationRequired' | translate}}</span>
+              </div>
+              <hr>
+              <div class="form-group w-100">
+                <button class="btn btn-success btn-lg float-right">{{'add' | translate}}</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

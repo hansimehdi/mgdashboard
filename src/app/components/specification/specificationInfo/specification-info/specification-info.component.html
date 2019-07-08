@@ -1,0 +1,81 @@
+<div class="progress p-0 m-0" style="height: 4px;" *ngIf="showProgress">
+  <div class="indeterminate-red"></div>
+</div>
+<div class="loader" *ngIf="pageLoading">Loading...</div>
+<div class="mt-3 ml-2 mr-2" *ngIf="!pageLoading && specification.id!==''">
+  <div class="container card-1 mt-3 pb-3">
+    <div class="row">
+      <div class="col-md-6">
+        <span class="d-flex justify-content-start">
+          <h6 class="t-green font-weight-bold"><span class="t-black">{{'enterprise' | translate}} :
+            </span>{{specification.Enterprise.username}}</h6>
+        </span>
+      </div>
+      <div class="col-md-6">
+        <span class="d-flex justify-content-end small t-gray">
+          {{specification.insertionDate | date : "dd-MM-y"}}
+        </span>
+      </div>
+    </div>
+    <hr>
+    <p>{{specification.description}}</p>
+    <br>
+    <hr>
+    <div class="row">
+      <div class="col-md-6">
+        <a class="t-blue pl-2 d-flex justify-content-start" (click)="addComment(specs.id)"><i
+            class="im im-speech-bubble-comment t-blue pr-2"></i><span
+            class="t-pink font-weight-bold">{{'comments' | translate}}
+            ({{specification.Comments.length}})</span></a>
+      </div>
+      <div class="col-md-6">
+        <a href="{{serverBase}}{{specification.pdfUrl}}" target="_blank"
+          class="d-flex justify-content-end t-blue small">{{'Download' | translate}} PDF</a>
+      </div>
+    </div>
+    <div class="row" *ngIf="isOwned()">
+      <div class="col-md-12">
+        <button class="btn btn-sm btn-danger float-right"
+          (click)="deleteSpec(specification.id)">{{'delete' | translate}}</button>
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="pl-3 col-md-12" *ngFor="let c of specification.Comments">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="pl-4">
+              <div class="col-md-12">
+                <span class="t-orange font-weight-bold d-flex justify-content-start">{{c.Center.username}}</span>
+                <span class="small d-flex justify-content-end t-gray">{{c.insertionDate | date : "dd-MM-y"}}</span>
+              </div>
+              <p class="pl-2">{{c.comment}}</p>
+            </div>
+            <hr>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row pb-3 pt-2" *ngIf="isCenter()">
+      <form [formGroup]="commentForm" (ngSubmit)="addComment(specification.id)" novalidate="true">
+        <div class="row">
+          <div class="col-md-12 d-block mx-auto">
+            <div class="container">
+              <div class="form-group w-100 d-block mx-auto">
+                <textarea class="form-control w-100" required name="comment" formControlName="comment"
+                  id="exampleFormControlTextarea1" rows="4" cols="150"></textarea>
+              </div>
+              <div class="form-group w-100">
+                <button class="btn btn-success btn-lg float-right">{{'comment' | translate}}</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="mt-3 ml-2 mr-2" *ngIf="!pageLoading && !specification.id===''">
+  <div class="container card-1">
+  </div>
+</div>

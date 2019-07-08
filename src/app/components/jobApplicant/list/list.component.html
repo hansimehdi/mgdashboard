@@ -1,0 +1,64 @@
+<div class="progress p-0 m-0" style="height: 4px;" *ngIf="showProgress">
+  <div class="indeterminate-red"></div>
+</div>
+<div class="loader" *ngIf="pageLoading">Loading...</div>
+<div class="mt-3 ml-2 mr-2" *ngIf="!pageLoading">
+  <div class="row ml-3 mr-3" *ngIf="users.length < 0">
+    <div class="container mt-5 mt-2">
+      <div class="alert alert-info text-center font-weight-bold" role="alert">
+        {{'noEnterpriseFound' | translate}}
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <form class="d-flex justify-content-center container">
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label class="pr-2">{{'search' | translate}} </mat-label>
+          <input matInput class="font-weight-bold" [(ngModel)]="searchId" name="searchId"
+            placeholder="{{'jobApplicant' | translate}}" (keyup)="searchFire($event);">
+          <mat-icon matSuffix><i class="im im-magnifier" (click)="search();"></i></mat-icon>
+        </mat-form-field>
+      </form>
+    </div>
+  </div>
+  <hr>
+  <div class="row" *ngIf="users.length > 0">
+    <div class="col-md-12" *ngFor="let c of users">
+      <div class="container">
+        <div class="card w-100">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-sm-4 col-md-4 col-lg-4 text-center">
+                <div class="img-thumbnail d-flex justify-content-center">
+                  <ngx-avatar class="account-avatar d-flex justify-content-center" src="{{serverBase}}{{c.logo.url}}"
+                    *ngIf="c.logo.id" size="188" [round]="false"></ngx-avatar>
+                  <ngx-avatar class="account-avatar d-flex justify-content-center" name="{{c.firstname}}"
+                    *ngIf="!c.logo.id" size="188" [round]="true"></ngx-avatar>
+                </div>
+              </div>
+              <div class="col-sm-8 col-md-8 col-lg-8">
+                <h5 class="card-title font-weight-bold t-orange">{{c.username}} {{c.firstname}}</h5>
+                <h6 class="card-subtitle mb-2 text-muted" *ngIf="c.User.domain!==''">{{c.User.domain}}</h6>
+                <p><strong>E-mail</strong>: {{c.email}}</p>
+                <p><strong>{{'phone' | translate}}</strong>: {{c.phone}}</p>
+                <p><strong>{{'CV' | translate}}</strong> : <small *ngIf="c.User.cvUrl"><a
+                      href="{{serverBase}}{{c.User.cvUrl}}" target="_blank">{{'Download' | translate}}</a></small><small
+                    *ngIf="!c.User.cvUrl" class="t-red">{{'missing' | translate}}</small></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="users.length <= 0">
+    <div class="container">
+      <div class="col-md-12">
+        <div class="alert alert-info text-center" role="alert">
+          <strong>{{'emptyList' | translate}}</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,12 @@
+.account-avatar /deep/ .avatar-content {
+    border : #ffffff solid 7px !important;
+}
+.account-avatar-container{
+    margin-top: -5%;
+}
+.account-avatar-sm /deep/ .avatar-content {
+    border : #ffffff solid 7px !important;
+}
+.account-avatar-sm{
+    margin-top: -8%;
+}
